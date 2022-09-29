@@ -1,11 +1,10 @@
 {
-  "name": "frontend",
+  "name": "client-app",
   "version": "0.0.0",
   "main": "main.js",
   "scripts": {
     "ng": "ng",
-    "electron": "ng build && electron .",
-    "start": "ng serve",
+    "start": "ng build && electron .",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
