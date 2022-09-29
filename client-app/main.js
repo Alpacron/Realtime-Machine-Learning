@@ -7,6 +7,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 900, height: 675,
         minWidth: 900, minHeight: 675,
+        show: false,
         icon: __dirname + '/src/assets/icon256.png',
         autoHideMenuBar: true,
         webPreferences: {
@@ -24,6 +25,11 @@ function createWindow() {
     mainWindow.on('close', event => {
         event.preventDefault();
         mainWindow.hide();
+    });
+
+    mainWindow.once('ready-to-show', () => {
+        createTray();
+        mainWindow.show();
     });
 }
 
@@ -62,7 +68,6 @@ if (!app.requestSingleInstanceLock()) {
 
     app.whenReady().then(() => {
         createWindow();
-        createTray();
     });
 
     app.on('before-quit', () => {
