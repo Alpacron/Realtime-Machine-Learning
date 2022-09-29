@@ -1,7 +1,7 @@
-const { app, BrowserWindow, Menu, Tray } = require('electron')
+const { app, BrowserWindow, Menu, Tray, ipcMain } = require('electron');
 
-let mainWindow
-let tray
+let mainWindow;
+let tray;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -11,14 +11,14 @@ function createWindow() {
         webPreferences: {
             devTools: !app.isPackaged
         }
-    })
-    if (app.isPackaged) mainWindow.removeMenu()
-    mainWindow.loadFile('dist/client-app/index.html')
+    });
+    if (app.isPackaged) mainWindow.removeMenu();
+    mainWindow.loadFile('dist/client-app/index.html');
 
     mainWindow.on('close', event => {
-        event.preventDefault()
-        mainWindow.hide()
-    })
+        event.preventDefault();
+        mainWindow.hide();
+    });
 }
 
 const trayMenu = Menu.buildFromTemplate([
@@ -33,35 +33,41 @@ const trayMenu = Menu.buildFromTemplate([
     {
         label: 'Quit ' + app.getName(),
         click: _ => {
-            app.quit()
+            app.quit();
         }
     }
-
-])
+]);
 
 function createTray() {
-    tray = new Tray(__dirname + '/src/assets/icon256.png')
-    tray.setContextMenu(trayMenu)
-    tray.setToolTip(app.getName())
+    tray = new Tray(__dirname + '/src/assets/icon256.png');
+    tray.setContextMenu(trayMenu);
+    tray.setToolTip(app.getName());
     tray.on('click', () => {
-        mainWindow.show()
-    })
+        mainWindow.show();
+    });
 }
 
 if (!app.requestSingleInstanceLock()) {
-    app.quit()
+    app.quit();
 } else {
     app.on('second-instance', () => {
-        if (mainWindow) mainWindow.show()
-    })
+        if (mainWindow) mainWindow.show();
+    });
 
     app.whenReady().then(() => {
-        createWindow()
-        createTray()
-    })
+        createWindow();
+        createTray();
+    });
 
     app.on('before-quit', () => {
-        mainWindow.destroy()
-        tray.destroy()
-    })
+        mainWindow.destroy();
+        tray.destroy();
+    });
 }
+
+// Get app main in app
+ipcMain.on('asynchronous-message', function (evt, messageObj) {
+    if (messageObj == 'getAppName') {
+        evt.sender.webContents.send('asynchronous-message', app.getName());
+    }
+});

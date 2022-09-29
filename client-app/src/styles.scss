@@ -1,39 +1,39 @@
 @import './font.scss';
+@import './main.scss';
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Gotham Rounded', 'verdana', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-code,
-pre {
-    font-family: monospace;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-    margin: 0;
-}
-
-button,
-input,
 a {
-    outline: none !important;
+    color: #ff4654;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+        text-decoration: underline;
+    }
 }
 
-input[type=submit] {
-    font-family: 'Gotham Rounded', 'verdana', sans-serif;
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #ff4654;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+
+    &.small {
+        padding: 8px;
+        border-radius: 8px;
+    }
+
+    &:hover,
+    &:focus-visible {
+        background: #c73541;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
 }
 
-input:-webkit-autofill,
-input:-webkit-autofill:focus {
-    transition: background-color 0s 600000s, color 0s 600000s;
+main {
+    padding: 16px;
 }
