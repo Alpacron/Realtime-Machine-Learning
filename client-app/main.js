@@ -2,7 +2,6 @@ const { app, BrowserWindow, Menu, Tray } = require('electron')
 
 let mainWindow
 let tray
-let overlay
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -12,7 +11,7 @@ function createWindow() {
         webPreferences: {
             devTools: !app.isPackaged
         }
-    });
+    })
     if (app.isPackaged) mainWindow.removeMenu()
     mainWindow.loadFile('dist/client-app/index.html')
 
@@ -48,12 +47,24 @@ function createTray() {
     })
 }
 
-app.whenReady().then(() => {
-    createWindow()
-    createTray()
-})
+if (!app.requestSingleInstanceLock()) {
+    app.quit()
+} else {
+    app.on('second-instance', () => {
+        if (mainWindow) {
+            if (mainWindow.isMinimized()) mainWindow.restore()
+            mainWindow.show()
+            mainWindow.focus()
+        }
+    })
 
-app.on('before-quit', () => {
-    mainWindow.destroy()
-    tray.destroy()
-});
+    app.whenReady().then(() => {
+        createWindow()
+        createTray()
+    })
+
+    app.on('before-quit', () => {
+        mainWindow.destroy()
+        tray.destroy()
+    })
+}
