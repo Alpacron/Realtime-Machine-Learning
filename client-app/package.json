@@ -2,13 +2,14 @@
   "name": "client-app",
   "version": "0.0.0",
   "main": "main.js",
+  "productName": "Valorant AI",
   "scripts": {
     "ng": "ng",
     "start": "ng build && electron .",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "package": "electron-packager . client-app --platform=win32 --arch=x64 --out=release-builds"
+    "win32": "electron-packager . --platform=win32 --arch=x64 --out=release-builds --prune=true --overwrite --icon=src/assets/icon.ico"
   },
   "private": true,
   "dependencies": {

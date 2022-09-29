@@ -10,3 +10,8 @@ Then run:
 npm i
 npm start
 ```
+
+To build the app:
+```
+npm run win32
+```

@@ -7,7 +7,7 @@ let overlay
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 800, height: 800,
-        icon: __dirname + '/src/assets/logo256.png',
+        icon: __dirname + '/src/assets/icon256.png',
         autoHideMenuBar: true,
         webPreferences: {
             devTools: !app.isPackaged
@@ -24,15 +24,15 @@ function createWindow() {
 
 const trayMenu = Menu.buildFromTemplate([
     {
-        icon: __dirname + '/src/assets/logo16.png',
-        label: 'Valorant AI',
+        icon: __dirname + '/src/assets/icon16.png',
+        label: app.getName(),
         enabled: false
     },
     {
         type: 'separator'
     },
     {
-        label: 'Quit Valorant AI',
+        label: 'Quit ' + app.getName(),
         click: _ => {
             app.quit()
         }
@@ -41,7 +41,7 @@ const trayMenu = Menu.buildFromTemplate([
 ])
 
 function createTray() {
-    tray = new Tray(__dirname + '/src/assets/logo256.png')
+    tray = new Tray(__dirname + '/src/assets/icon256.png')
     tray.setContextMenu(trayMenu)
     tray.on('click', () => {
         mainWindow.show()
