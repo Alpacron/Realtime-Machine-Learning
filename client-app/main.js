@@ -1,7 +1,7 @@
-const { app, BrowserWindow, Menu, Tray } = require('electron');
+const { app, BrowserWindow, Menu, Tray } = require('electron')
 
-let tray
-let mainWindow
+let tray = null
+let mainWindow = null
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -46,6 +46,7 @@ app.whenReady().then(() => {
     createTray()
 })
 
-app.on('before-quit', function () {
-    tray.destroy();
+app.on('before-quit', () => {
+    mainWindow.destroy()
+    tray.destroy()
 });
