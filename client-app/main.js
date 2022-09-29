@@ -6,6 +6,7 @@ let tray;
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 900, height: 675,
+        minWidth: 900, minHeight: 675,
         icon: __dirname + '/src/assets/icon256.png',
         autoHideMenuBar: true,
         webPreferences: {
