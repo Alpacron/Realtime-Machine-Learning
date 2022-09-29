@@ -5,7 +5,7 @@ let tray
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 800, height: 800,
+        width: 900, height: 675,
         icon: __dirname + '/src/assets/icon256.png',
         autoHideMenuBar: true,
         webPreferences: {
@@ -51,11 +51,7 @@ if (!app.requestSingleInstanceLock()) {
     app.quit()
 } else {
     app.on('second-instance', () => {
-        if (mainWindow) {
-            if (mainWindow.isMinimized()) mainWindow.restore()
-            mainWindow.show()
-            mainWindow.focus()
-        }
+        if (mainWindow) mainWindow.show()
     })
 
     app.whenReady().then(() => {
