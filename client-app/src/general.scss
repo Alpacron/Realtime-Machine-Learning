@@ -2,8 +2,8 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Gotham Rounded', 'verdana', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    user-select: none;
+    background: black;
 }
 
 code,
