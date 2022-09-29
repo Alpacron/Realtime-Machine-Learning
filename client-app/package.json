@@ -4,15 +4,12 @@
   "main": "main.js",
   "productName": "Valorant AI",
   "scripts": {
-    "ng": "ng",
     "start": "npm-run-all -p electron:serve ng:serve",
-    "ng:serve": "ng serve",
-    "electron:serve": "wait-on tcp:4200 && electron .",
-    "electron": "ng build && electron .",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "win32": "electron-packager . --platform=win32 --arch=x64 --out=release-builds --prune=true --overwrite --icon=src/assets/icon.ico"
+    "release": "electron-packager . --platform=win32 --arch=x64 --out=release-builds --prune=true --overwrite --icon=src/assets/icon.ico",
+    "ng:serve": "ng serve",
+    "electron:serve": "wait-on tcp:4200 && electron ."
   },
   "private": true,
   "dependencies": {
