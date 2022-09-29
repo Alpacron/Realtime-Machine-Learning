@@ -12,8 +12,13 @@ function createWindow() {
             devTools: !app.isPackaged
         }
     });
-    if (app.isPackaged) mainWindow.removeMenu();
-    mainWindow.loadFile('dist/client-app/index.html');
+    if (app.isPackaged) {
+        mainWindow.removeMenu();
+        mainWindow.loadFile('dist/client-app/index.html');
+    }
+    else {
+        mainWindow.loadURL('http://localhost:4200');
+    }
 
     mainWindow.on('close', event => {
         event.preventDefault();
