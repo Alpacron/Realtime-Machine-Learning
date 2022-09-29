@@ -1,0 +1,63 @@
+@font-face {
+    font-display: swap;
+    font-family: Gotham Rounded;
+    font-style: normal;
+    font-weight: 300;
+    src: local("Gotham Rounded Light"), url(./fonts/GothamRnd-Light_Web.woff2) format("woff2"), url(./fonts/GothamRnd-Light_Web.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Gotham Rounded;
+    font-style: italic;
+    font-weight: 300;
+    src: local("Gotham Rounded Light"), url(./fonts/GothamRnd-LightItalic_Web.woff2) format("woff2"), url(./fonts/GothamRnd-LightItalic_Web.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Gotham Rounded;
+    font-style: normal;
+    font-weight: 400;
+    src: local("Gotham Rounded Book"), url(./fonts/GothamRnd-Book_Web.woff2) format("woff2"), url(./fonts/GothamRnd-Book_Web.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Gotham Rounded;
+    font-style: italic;
+    font-weight: 400;
+    src: local("Gotham Rounded Book"), url(./fonts/GothamRnd-BookItalic_Web.woff2) format("woff2"), url(./fonts/GothamRnd-BookItalic_Web.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Gotham Rounded;
+    font-style: normal;
+    font-weight: 500;
+    src: local("Gotham Rounded Medium"), url(./fonts/GothamRnd-Medium_Web.woff2) format("woff2"), url(./fonts/GothamRnd-Medium_Web.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Gotham Rounded;
+    font-style: italic;
+    font-weight: 500;
+    src: local("Gotham Rounded Medium"), url(./fonts/GothamRnd-MediumItalic_Web.woff2) format("woff2"), url(./fonts/GothamRnd-MediumItalic_Web.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Gotham Rounded;
+    font-style: normal;
+    font-weight: 700;
+    src: local("Gotham Rounded Bold"), url(./fonts/GothamRnd-Bold_Web.woff2) format("woff2"), url(./fonts/GothamRnd-Bold_Web.woff) format("woff")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: Gotham Rounded;
+    font-style: italic;
+    font-weight: 700;
+    src: local("Gotham Rounded Bold"), url(./fonts/GothamRnd-BoldItalic_Web.woff2) format("woff2"), url(./fonts/GothamRnd-BoldItalic_Web.woff) format("woff")
+}
