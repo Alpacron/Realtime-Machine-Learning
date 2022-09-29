@@ -1,7 +1,25 @@
 const { app, BrowserWindow, Menu, Tray } = require('electron')
 
-let tray = null
-let mainWindow = null
+let tray
+let mainWindow
+
+const trayMenu = Menu.buildFromTemplate([
+    {
+        icon: __dirname + '/src/logo16.png',
+        label: 'App',
+        enabled: false
+    },
+    {
+        type: 'separator'
+    },
+    {
+        label: 'Quit App',
+        click: _ => {
+            app.quit()
+        }
+    }
+
+])
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -18,24 +36,7 @@ function createWindow() {
 
 function createTray() {
     tray = new Tray(__dirname + '/src/logo256.png')
-    const contextMenu = Menu.buildFromTemplate([
-        {
-            icon: __dirname + '/src/logo16.png',
-            label: 'App',
-            enabled: false
-        },
-        {
-            type: 'separator'
-        },
-        {
-            label: 'Quit App',
-            click: _ => {
-                app.quit()
-            }
-        }
-
-    ])
-    tray.setContextMenu(contextMenu)
+    tray.setContextMenu(trayMenu)
     tray.on('click', () => {
         mainWindow.show()
     })
