@@ -42,6 +42,7 @@ const trayMenu = Menu.buildFromTemplate([
 function createTray() {
     tray = new Tray(__dirname + '/src/assets/icon256.png')
     tray.setContextMenu(trayMenu)
+    tray.setToolTip(app.getName())
     tray.on('click', () => {
         mainWindow.show()
     })
