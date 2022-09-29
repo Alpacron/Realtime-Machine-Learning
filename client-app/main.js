@@ -7,9 +7,14 @@ let overlay
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 800, height: 800,
-        icon: __dirname + '/src/assets/logo256.png'
+        icon: __dirname + '/src/assets/logo256.png',
+        autoHideMenuBar: true,
+        webPreferences: {
+            devTools: !app.isPackaged
+        }
     });
-    mainWindow.loadFile('dist/client-app/index.html');
+    if (app.isPackaged) mainWindow.removeMenu()
+    mainWindow.loadFile('dist/client-app/index.html')
 
     mainWindow.on('close', event => {
         event.preventDefault()
