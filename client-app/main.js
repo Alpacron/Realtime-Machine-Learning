@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, Tray, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, Tray } = require('electron');
 
 let mainWindow;
 let tray;
@@ -64,10 +64,3 @@ if (!app.requestSingleInstanceLock()) {
         tray.destroy();
     });
 }
-
-// Get app main in app
-ipcMain.on('asynchronous-message', function (evt, messageObj) {
-    if (messageObj == 'getAppName') {
-        evt.sender.webContents.send('asynchronous-message', app.getName());
-    }
-});

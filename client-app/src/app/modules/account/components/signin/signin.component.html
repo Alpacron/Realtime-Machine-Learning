@@ -1,6 +1,6 @@
 <form [formGroup]="signinForm" (ngSubmit)="onSubmit()">
-    <h2>Test</h2>
-    <legend>To continue, log in to Test</legend>
+    <h2>{{appname}}</h2>
+    <legend>To continue, log in to {{appname}}</legend>
     <div>
         <label for="email">Email:</label>
         <input type="email" id="email" spellCheck="false" autoComplete="email" formControlName="email" />
