@@ -2,7 +2,7 @@
   "name": "client-app",
   "version": "0.0.0",
   "main": "main.js",
-  "productName": "Valorant AI",
+  "productName": "ANTIVALOR",
   "scripts": {
     "start": "npm-run-all -p electron:serve ng:serve",
     "build": "ng build",
