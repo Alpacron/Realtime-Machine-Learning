@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using AuthService.Models;
 using AuthService.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AuthService.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("")]
 public class UsersController : ControllerBase
 {
     private IUserService _userService;
@@ -15,13 +16,7 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
-    [HttpGet("signedin")]
-    public IActionResult LoggedIn()
-    {
-        return Ok(true);
-    }
-
-    [HttpPost("register")]
+    [HttpPost("signup")]
     public IActionResult CreateUser(AuthenticateRequest model)
     {
         var response = _userService.Authenticate(model);
@@ -32,8 +27,22 @@ public class UsersController : ControllerBase
         return Ok(true);
     }
 
-    [HttpPost("authenticate")]
-    public IActionResult Authenticate()
+    [HttpPost("signin")]
+    public IActionResult Login()
+    {
+        return Ok(true);
+    }
+
+    [Authorize]
+    [HttpGet("signedin")]
+    public IActionResult IsLoggedIn()
+    {
+        return Ok(true);
+    }
+
+    [Authorize]
+    [HttpPost("signout")]
+    public IActionResult LogOut()
     {
         return Ok(true);
     }
