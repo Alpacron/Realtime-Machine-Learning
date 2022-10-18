@@ -1,22 +1,91 @@
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using AuthService.Data;
 using AuthService.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
+using System.Data;
 
 namespace AuthService.Services;
 
 public interface IUserService
 {
-    string Authenticate(AuthenticateRequest model);
+    Task<User> Create(string username, string password, string email);
+    Task<User> GetByEmail(string email);
+    Task<bool> VerifyPassword(Guid id, string password);
+    Task<User> Delete(Guid id);
 }
 
 public class UserService : IUserService
 {
-    public string Authenticate(AuthenticateRequest model)
+    private readonly AuthContext _context;
+
+    public UserService(AuthContext context)
     {
-        return "yes";
+        _context = context;
+    }
+
+    public async Task<User> Create(string username, string password, string email)
+    {
+        if (await UserWithEmailExists(email)) throw new Exception("email was already taken.");
+
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Username = username,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
+            Email = email
+        };
+
+        _context.Add(user);
+        await _context.SaveChangesAsync();
+
+        return user;
+    }
+
+    public async Task<bool> UserWithEmailExists(string email)
+    {
+        var user = await _context.User.FirstOrDefaultAsync(m => m.Email == email);
+
+        return user != null;
+    }
+
+    public async Task<User> GetByEmail(string email)
+    {
+        var user = await _context.User.FirstOrDefaultAsync(m => m.Email == email);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException("User with mail not found.");
+        }
+
+        return user;
+    }
+
+    public async Task<bool> VerifyPassword(Guid id, string password)
+    {
+        var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
+
+        if(user == null)
+        {
+            throw new KeyNotFoundException("User with id not found.");
+        }
+        
+        return BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+    }
+
+    public async Task<User> Delete(Guid id)
+    {
+        var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException("User with id not found.");
+        }
+
+        _context.User.Remove(user);
+        await _context.SaveChangesAsync();
+
+        return user;
     }
 }
