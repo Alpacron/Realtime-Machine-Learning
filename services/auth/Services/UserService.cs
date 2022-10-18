@@ -1,10 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using AuthService.Data;
 using AuthService.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using BCrypt.Net;
-using System.Data;
 
 namespace AuthService.Services;
 
