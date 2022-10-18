@@ -4,7 +4,10 @@
       "secretStore": "LocalSecretsFile",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/ip-machine-learning/databases/UserDB",
       "type": "mssql.azure",
-      "connectionId": "ConnectionStrings:UserDB",
+      "connectionId": "ConnectionStrings:UserDB"
+    },
+    "secrets1": {
+      "type": "secrets.user",
       "dynamicId": null
     }
   }

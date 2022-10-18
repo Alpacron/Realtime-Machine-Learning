@@ -39,7 +39,9 @@ public class AuthController : ControllerBase
 
         User user = _userService.GetByEmail(email).Result;
 
-        return Ok(_userService.VerifyPassword(user.Id, password));
+        bool result = _userService.VerifyPassword(user.Id, password).Result;
+
+        return Ok(user);
     }
 
     [Authorize]

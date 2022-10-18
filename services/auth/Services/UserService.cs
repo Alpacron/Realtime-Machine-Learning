@@ -8,8 +8,8 @@ public interface IUserService
 {
     Task<User> Create(string username, string password, string email);
     Task<User> GetByEmail(string email);
-    Task<bool> VerifyPassword(Guid id, string password);
-    Task<User> Delete(Guid id);
+    Task<bool> VerifyPassword(int id, string password);
+    Task<User> Delete(int id);
 }
 
 public class UserService : IUserService
@@ -27,7 +27,6 @@ public class UserService : IUserService
 
         var user = new User
         {
-            Id = Guid.NewGuid(),
             Username = username,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
             Email = email
@@ -58,19 +57,19 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task<bool> VerifyPassword(Guid id, string password)
+    public async Task<bool> VerifyPassword(int id, string password)
     {
         var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
 
-        if(user == null)
+        if (user == null)
         {
             throw new KeyNotFoundException("User with id not found.");
         }
-        
+
         return BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
     }
 
-    public async Task<User> Delete(Guid id)
+    public async Task<User> Delete(int id)
     {
         var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
 

@@ -6,7 +6,7 @@ public class User
 {
     [Required]
     
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 
     [Required]
     public string Username { get; set; }
