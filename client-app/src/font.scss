@@ -61,3 +61,8 @@
     font-weight: 700;
     src: local("Gotham Rounded Bold"), url(./fonts/GothamRnd-BoldItalic_Web.woff2) format("woff2"), url(./fonts/GothamRnd-BoldItalic_Web.woff) format("woff")
 }
+
+@font-face {
+    font-family: Commando;
+    src: url(./fonts/commando.ttf);
+}

@@ -1,14 +1,15 @@
-const { app, BrowserWindow, Menu, Tray } = require('electron');
+const { app, BrowserWindow, Menu, Tray, nativeImage } = require('electron');
 
 let mainWindow;
 let tray;
+const icon = nativeImage.createFromPath(__dirname + "/src/assets/icon.ico");
 
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 900, height: 675,
         minWidth: 900, minHeight: 675,
         show: false,
-        icon: __dirname + '/src/assets/icon256.png',
+        icon: icon,
         autoHideMenuBar: true,
         webPreferences: {
             devTools: !app.isPackaged
@@ -33,9 +34,11 @@ function createWindow() {
     });
 }
 
+
 const trayMenu = Menu.buildFromTemplate([
+
     {
-        icon: __dirname + '/src/assets/icon16.png',
+        icon: icon.resize({ width: 16, height: 16 }),
         label: app.getName(),
         enabled: false
     },
@@ -51,7 +54,7 @@ const trayMenu = Menu.buildFromTemplate([
 ]);
 
 function createTray() {
-    tray = new Tray(__dirname + '/src/assets/icon256.png');
+    tray = new Tray(icon);
     tray.setContextMenu(trayMenu);
     tray.setToolTip(app.getName());
     tray.on('click', () => {
