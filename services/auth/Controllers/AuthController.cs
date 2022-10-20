@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using AuthService.Models;
 using AuthService.Services;
+using AuthService.Helpers;
+using System.Collections.Generic;
 
 namespace AuthService.Controllers;
 
@@ -16,52 +17,56 @@ public class AuthController : ControllerBase
         _userService = userService;
     }
 
-    [HttpPost("signup")]
-    public IActionResult Signup(string username, string password, string email)
+    [HttpPost("authenticate")]
+    public IActionResult Authenticate(AuthenticateRequest authenticateRequest)
     {
-        if (username == null || password == null || email == null)
+        AuthenticateResponse response = _userService.Authenticate(authenticateRequest).Result;
+
+        if (response == null)
         {
-            return NotFound();
+            return BadRequest(new ProblemDetails()
+            {
+                Title = "Email or password is incorrect."
+            });
         }
 
-        User user = _userService.Create(username, password, email).Result;
-
-        return Ok(user);
+        return Ok(response);
     }
 
-    [HttpPost("signin")]
-    public IActionResult Login(string email, string password)
+    [HttpPost("register")]
+    public IActionResult Register(RegisterRequest registerRequest)
     {
-        if (password == null || email == null)
+        AuthenticateResponse response = _userService.Register(registerRequest).Result;
+
+        if (response == null)
         {
-            return NotFound();
+            Dictionary<string, string[]> errors = new Dictionary<string, string[]>();
+            errors.Add("Email", new string[] { "Email is already in use." });
+            ValidationProblemDetails problem = new ValidationProblemDetails(errors);
+            return BadRequest(problem);
         }
 
-        User user = _userService.GetByEmail(email).Result;
-
-        bool result = _userService.VerifyPassword(user.Id, password).Result;
-
-        return Ok(user);
+        return Ok(response);
     }
 
     [Authorize]
-    [HttpGet("signedin")]
-    public IActionResult IsLoggedIn()
+    [HttpGet("authenticated")]
+    public IActionResult Authenticated()
     {
-        return Ok(true);
+        return Ok();
     }
 
     [Authorize]
     [HttpPost("signout")]
-    public IActionResult LogOut()
+    public IActionResult Signout()
     {
-        return Ok(true);
+        return Ok();
     }
 
     [Authorize]
     [HttpPost("delete")]
     public IActionResult Delete()
     {
-        return Ok(true);
+        return Ok();
     }
 }

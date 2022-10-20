@@ -1,20 +1,22 @@
 using AuthService.Data;
+using AuthService.Helpers;
 using AuthService.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<Jwt>(builder.Configuration.GetSection("Jwt"));
+
+// Add db connection
+
+builder.Services.AddDbContext<AuthContext>(options =>
+        options.UseSqlServer(builder.Configuration["ConnectionStrings:UserDB"]));
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>();
 
-// Add db connection
-
-builder.Configuration.AddUserSecrets<Program>(true);
-
-builder.Services.AddDbContext<AuthContext>(options =>
-        options.UseSqlServer(builder.Configuration["ConnectionStrings:UserDB"]));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -31,8 +33,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseCors(x => x
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 

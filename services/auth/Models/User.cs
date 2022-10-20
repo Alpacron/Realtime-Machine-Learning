@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace AuthService.Models;
@@ -5,15 +6,21 @@ namespace AuthService.Models;
 public class User
 {
     [Required]
-    
     public int Id { get; set; }
 
-    [Required]
+    [Required, MinLength(4)]
     public string Username { get; set; }
 
-    [Required]
+    [Required, JsonIgnore]
     public string PasswordHash { get; set; }
 
-    [Required]
+    [Required, EmailAddress]
     public string Email { get; set; }
+
+    public User(string username, string passwordHash, string email)
+    {
+        Username = username;
+        PasswordHash = passwordHash;
+        Email = email;
+    }
 }

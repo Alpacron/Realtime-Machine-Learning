@@ -1,86 +1,89 @@
 using AuthService.Data;
+using AuthService.Helpers;
 using AuthService.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace AuthService.Services;
 
 public interface IUserService
 {
-    Task<User> Create(string username, string password, string email);
-    Task<User> GetByEmail(string email);
-    Task<bool> VerifyPassword(int id, string password);
+    Task<AuthenticateResponse> Authenticate(AuthenticateRequest authenticateRequest);
+    Task<AuthenticateResponse> Register(RegisterRequest registerRequest);
+    Task<User> GetById(int id);
     Task<User> Delete(int id);
 }
 
 public class UserService : IUserService
 {
     private readonly AuthContext _context;
+    private readonly Jwt _jwt;
 
-    public UserService(AuthContext context)
+    public UserService(AuthContext context, IOptions<Jwt> jwt)
     {
         _context = context;
+        _jwt = jwt.Value;
+    }
+    public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest authenticateRequest)
+    {
+        var user = await _context.User.SingleOrDefaultAsync(m => m.Email == authenticateRequest.Email);
+        if (user == null) return null;
+
+        bool verify = BCrypt.Net.BCrypt.Verify(authenticateRequest.Password, user.PasswordHash);
+        if (!verify) return null;
+
+        var token = generateJwtToken(user);
+
+        return new AuthenticateResponse(user, token);
     }
 
-    public async Task<User> Create(string username, string password, string email)
+    public async Task<AuthenticateResponse> Register(RegisterRequest registerRequest)
     {
-        if (await UserWithEmailExists(email)) throw new Exception("email was already taken.");
+        var existingUser = await _context.User.SingleOrDefaultAsync(m => m.Email == registerRequest.Email);
+        if (existingUser != null) return null;
 
-        var user = new User
-        {
-            Username = username,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
-            Email = email
-        };
+        var user = new User(registerRequest.Username, BCrypt.Net.BCrypt.HashPassword(registerRequest.Password), registerRequest.Email);
 
         _context.Add(user);
         await _context.SaveChangesAsync();
 
-        return user;
+        var token = generateJwtToken(user);
+
+        return new AuthenticateResponse(user, token);
     }
 
-    public async Task<bool> UserWithEmailExists(string email)
+    public async Task<User> GetById(int id)
     {
-        var user = await _context.User.FirstOrDefaultAsync(m => m.Email == email);
-
-        return user != null;
-    }
-
-    public async Task<User> GetByEmail(string email)
-    {
-        var user = await _context.User.FirstOrDefaultAsync(m => m.Email == email);
-
-        if (user == null)
-        {
-            throw new KeyNotFoundException("User with mail not found.");
-        }
-
-        return user;
-    }
-
-    public async Task<bool> VerifyPassword(int id, string password)
-    {
-        var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
-
-        if (user == null)
-        {
-            throw new KeyNotFoundException("User with id not found.");
-        }
-
-        return BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+        return await _context.User.SingleOrDefaultAsync(m => m.Id == id);
     }
 
     public async Task<User> Delete(int id)
     {
-        var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
-
-        if (user == null)
-        {
-            throw new KeyNotFoundException("User with id not found.");
-        }
+        var user = await _context.User.SingleOrDefaultAsync(m => m.Id == id);
+        if (user == null) return null;
 
         _context.User.Remove(user);
         await _context.SaveChangesAsync();
 
         return user;
+    }
+
+    private string generateJwtToken(User user)
+    {
+        // generate token that is valid for 7 days
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_jwt.Key);
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+            Expires = DateTime.UtcNow.AddDays(7),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
     }
 }
