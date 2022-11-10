@@ -14,7 +14,8 @@ public class UserServiceTest
     {
         Id = 0,
         Email = "test@test.com",
-        PasswordHash = BCrypt.Net.BCrypt.HashPassword("Test123!")
+        PasswordHash = BCrypt.Net.BCrypt.HashPassword("Test123!"),
+        Username = "test"
     };
     private UserService userService;
     private AuthContext context;
@@ -100,8 +101,7 @@ public class UserServiceTest
         {
             Email = "test@test.com",
             Username = "test",
-            Password = "Test123!",
-            PhoneNumber = "0612345678"
+            Password = "Test123!"
         };
 
         AuthenticateResponse response = await userService.Register(request);
@@ -120,8 +120,7 @@ public class UserServiceTest
         {
             Email = "test2@test.com",
             Username = "test2",
-            Password = "Test123!",
-            PhoneNumber = "0612345678"
+            Password = "Test123!"
         };
 
         AuthenticateResponse response = await userService.Register(request);
@@ -140,8 +139,7 @@ public class UserServiceTest
         {
             Email = "test2@test.com",
             Username = "test2",
-            Password = "Test123!",
-            PhoneNumber = "0612345678"
+            Password = "Test123!"
         };
 
         await userService.Register(request);
@@ -175,7 +173,7 @@ public class UserServiceTest
     [Test]
     public async Task Delete_UnknownUser_ReturnsNull()
     {
-        Guid userId = Guid.NewGuid();
+        int userId = 1;
 
         DeleteResponse response = await userService.Delete(userId);
 
@@ -197,7 +195,7 @@ public class UserServiceTest
     [Test]
     public async Task GetById_UnkownUser_ReturnsNull()
     {
-        Guid userId = Guid.NewGuid();
+        int userId = 1;
 
         User user = await userService.GetById(userId);
 
@@ -233,20 +231,6 @@ public class UserServiceTest
     }
 
     [Test]
-    public async Task Update_ValidUser_PhoneNumber_UpdatesPhoneNumber()
-    {
-        UpdateRequest request = new UpdateRequest() { PhoneNumber = "0611111111" };
-        AuthenticateResponse response = await userService.Update(defaultUser.Id, request);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(response.Success, Is.True);
-            Assert.That(response.Result.Id, Is.EqualTo(defaultUser.Id));
-            Assert.That(context.User.FirstOrDefault().PhoneNumber, Is.EqualTo(request.PhoneNumber));
-        });
-    }
-
-    [Test]
     public async Task Update_ValidUser_Password_UpdatesPassword()
     {
         UpdateRequest request = new UpdateRequest() { Password = "NewTestPassword123!" };
@@ -266,7 +250,6 @@ public class UserServiceTest
         UpdateRequest request = new UpdateRequest() {
             Username = "test2",
             Email = "test2@test.com",
-            PhoneNumber = "0611111111",
             Password = "NewTestPassword123!"
         };
         AuthenticateResponse response = await userService.Update(defaultUser.Id, request);
@@ -277,7 +260,6 @@ public class UserServiceTest
             Assert.That(response.Result.Id, Is.EqualTo(defaultUser.Id));
             Assert.That(context.User.FirstOrDefault().Username, Is.EqualTo(request.Username));
             Assert.That(context.User.FirstOrDefault().Email, Is.EqualTo(request.Email));
-            Assert.That(context.User.FirstOrDefault().PhoneNumber, Is.EqualTo(request.PhoneNumber));
             Assert.That(BCrypt.Net.BCrypt.Verify(context.User.FirstOrDefault().PasswordHash, defaultUser.PasswordHash), Is.False);
         });
     }
@@ -286,7 +268,7 @@ public class UserServiceTest
     public async Task Update_UnkownUser_ReturnsNull()
     {
         UpdateRequest request = new UpdateRequest() { Username = "test2" };
-        Guid userId = Guid.NewGuid();
+        int userId = 1;
         AuthenticateResponse response = await userService.Update(userId, request);
 
         Assert.Multiple(() =>
