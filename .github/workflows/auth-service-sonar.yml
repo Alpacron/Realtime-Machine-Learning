@@ -2,6 +2,7 @@ name: Auth Service - Sonar
 
 on:
   push:
+    paths: [ "services/auth/**" ]
     branches: [ "main" ]
   pull_request:
     paths: [ "services/auth/**" ]

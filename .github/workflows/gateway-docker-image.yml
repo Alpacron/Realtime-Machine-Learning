@@ -2,8 +2,6 @@ name: Gateway - Docker Build and Push Image
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     paths: [ "gateway/**" ]
     branches: [ "main" ]
 
