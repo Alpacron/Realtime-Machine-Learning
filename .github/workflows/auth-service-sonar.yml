@@ -45,7 +45,7 @@ jobs:
         shell: powershell
         run: |
           cd services/auth
-          dotnet test authservice.Tests/authservice.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+          dotnet test Authservice.Tests/Authservice.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"Alpacron_Realtime-Machine-Learning" /o:"alpacron" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          donet build
+          dotnet build
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
