@@ -2,7 +2,7 @@ name: Gateway - Docker Build and Push Image
 
 on:
   push:
-    paths: [ "gateway/**" ]
+    paths: [ "gateway/**", ".github/workflows/gateway-docker-image.yml" ]
     branches: [ "main" ]
 
 jobs:
