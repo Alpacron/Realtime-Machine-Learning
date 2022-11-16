@@ -12,7 +12,7 @@ public class UserServiceTest
     private Jwt jwt;
     private readonly User defaultUser = new()
     {
-        Id = 0,
+        Id = 1,
         Email = "test@test.com",
         PasswordHash = BCrypt.Net.BCrypt.HashPassword("Test123!"),
         Username = "test"
@@ -173,7 +173,7 @@ public class UserServiceTest
     [Test]
     public async Task Delete_UnknownUser_ReturnsNull()
     {
-        int userId = 1;
+        int userId = 2;
 
         DeleteResponse response = await userService.Delete(userId);
 
@@ -195,7 +195,7 @@ public class UserServiceTest
     [Test]
     public async Task GetById_UnkownUser_ReturnsNull()
     {
-        int userId = 1;
+        int userId = 2;
 
         User user = await userService.GetById(userId);
 
@@ -268,7 +268,7 @@ public class UserServiceTest
     public async Task Update_UnkownUser_ReturnsNull()
     {
         UpdateRequest request = new UpdateRequest() { Username = "test2" };
-        int userId = 1;
+        int userId = 2;
         AuthenticateResponse response = await userService.Update(userId, request);
 
         Assert.Multiple(() =>
