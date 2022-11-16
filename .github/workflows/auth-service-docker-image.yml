@@ -2,7 +2,7 @@ name: Auth Service - Docker Build and Push Image
 
 on:
   push:
-    paths: [ "services/auth/**" ]
+    paths: [ "services/auth/**", ".github/workflows/auth-service-docker-image.yml" ]
     branches: [ "main" ]
 
 jobs:
