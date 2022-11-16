@@ -3,6 +3,9 @@ name: Auth Service - Sonar
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    paths: [ "services/auth/**" ]
+    branches: [ "main" ]
 
 jobs:
   build:
