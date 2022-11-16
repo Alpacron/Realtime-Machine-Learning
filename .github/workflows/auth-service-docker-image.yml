@@ -2,6 +2,7 @@ name: Docker Build and Push Image
 
 on:
   push:
+    paths: [ "services/auth/**" ]
     branches: [ "main" ]
 
 jobs:
