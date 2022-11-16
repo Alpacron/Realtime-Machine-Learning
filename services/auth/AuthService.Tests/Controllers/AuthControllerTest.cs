@@ -11,7 +11,7 @@ public class AuthControllerTest
 {
     private readonly User defaultUser = new()
     {
-        Id = 0,
+        Id = 1,
         Email = "test@test.com",
         PasswordHash = BCrypt.Net.BCrypt.HashPassword("Test123!"),
         Username = "test"
