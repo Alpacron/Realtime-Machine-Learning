@@ -1,4 +1,4 @@
-name: Docker Build and Push Image
+name: Auth Service - Docker Build and Push Image
 
 on:
   push:
