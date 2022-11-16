@@ -4,6 +4,9 @@ on:
   push:
     paths: [ "services/auth/**" ]
     branches: [ "main" ]
+  pull_request:
+    paths: [ "services/auth/**" ]
+    branches: [ "main" ]
 
 jobs:
   build:
