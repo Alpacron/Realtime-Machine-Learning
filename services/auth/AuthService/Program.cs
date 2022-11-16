@@ -6,6 +6,8 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile("secrets/appsettings.secrets.json", true);
+
 builder.Services.Configure<Jwt>(builder.Configuration.GetSection("Jwt"));
 
 // Add db connection
