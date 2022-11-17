@@ -16,7 +16,7 @@ microk8s enable portainer
 ### Setting up the cluster for the first time
 To setup the cluster first run:
 ```commandline
-microk8s kubectl create namespace rml && git clone https://github.com/Alpacron/Realtime-Machine-Learning repo
+microk8s kubectl create namespace rml ; git clone https://github.com/Alpacron/Realtime-Machine-Learning repo
 ```
 
 Then enter the secrets in the secrets file:
