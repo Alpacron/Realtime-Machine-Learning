@@ -42,7 +42,7 @@ builder.Services.AddOcelot().AddKubernetes();
 
 var app = builder.Build();
 
-app.Logger.LogInformation(secrets);
+app.Logger.LogWarning(secrets);
 
 app.UseHttpsRedirection();
 
