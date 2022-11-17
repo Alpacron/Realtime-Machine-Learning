@@ -2,14 +2,14 @@
 
 ### Initial set-up microk8s on netlab with k8s template
 ```commandline
-sudo snap refresh microk8s --channel=1.25/stable
-microk8s enable dns
+sudo snap refresh microk8s --channel=1.25/stable\
+microk8s enable dns\
 microk8s enable ingress
 ```
 
 Optionally:
 ```commandline
-microk8s enable community
+microk8s enable community\
 microk8s enable portainer
 ```
 
@@ -28,7 +28,7 @@ nano repo/k8s-config/appsettings.secrets.json
 Now we can apply the secrets and config files:
 ```commandline
 microk8s kubectl create secret generic global-secret --from-file=repo/k8s-config/appsettings.secrets.json -n rml\
-&& microk8s kubectl apply -f repo/k8s-config
+&& microk8s kubectl apply -f repo/k8s-config/rml
 ```
 
 ### Updating the cluster
@@ -41,11 +41,12 @@ microk8s kubectl delete -f repo/k8s-config\
 Then apply the latest version:
 ```commandline
 git clone https://github.com/Alpacron/Realtime-Machine-Learning repo\
-&& microk8s kubectl apply -f repo/k8s-config
+&& microk8s kubectl apply -f repo/k8s-config/rml
 ```
 
 ### To clean up the cluster
 Delete repo and namespace:
 ```commandline
-rm -rf repo ; microk8s kubectl delete namespace rml
+rm -rf repo\
+; microk8s kubectl delete namespace rml
 ```
