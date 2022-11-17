@@ -8,6 +8,8 @@ I decided to make an interactive desktop application which records the game, exe
 
 > The latest release of the desktop application can be found: [here](/releases/latest)
 
+> The current backend environment is setup on a vm in netlab on: [192.168.240.10](http://192.168.240.10)
+
 ## Getting Started
 
 ### Prerequisites
@@ -16,8 +18,10 @@ I decided to make an interactive desktop application which records the game, exe
 - Node
 
 ### Setup
-To run each service/application locally see the following documents:
-- [client app](./client-app//README.md)
+To run the whole backend server on microk8s see the [k8s cluster setup](./k8s-config/README.md) document.
+
+Then run the client app and valorant on your local machine:
+- [client app setup](./client-app/README.md) document.
 
 ## License
 This project is licensed under the [MIT](https://opensource.org/licenses/MIT) license.
