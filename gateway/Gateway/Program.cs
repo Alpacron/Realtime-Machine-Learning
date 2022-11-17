@@ -43,7 +43,9 @@ var app = builder.Build();
 
 app.UseExceptionHandler("/Error");
 
-app.Logger.LogWarning("secrets: ", secrets);
+app.Logger.LogWarning("secrets: ");
+app.Logger.LogWarning(secrets);
+app.Logger.LogWarning(securityKey);
 
 app.UseHttpsRedirection();
 
