@@ -11,7 +11,6 @@ builder.Configuration.AddJsonFile("secrets/appsettings.secrets.json", true);
 
 var secrets = builder.Configuration.ToString();
 
-
 var securityKey = builder.Configuration.GetSection("Jwt")["Key"];
 
 builder.Services.AddAuthentication(options =>
@@ -42,7 +41,9 @@ builder.Services.AddOcelot().AddKubernetes();
 
 var app = builder.Build();
 
-app.Logger.LogWarning(secrets);
+app.UseExceptionHandler("/Error");
+
+app.Logger.LogWarning("secrets: ", secrets);
 
 app.UseHttpsRedirection();
 
