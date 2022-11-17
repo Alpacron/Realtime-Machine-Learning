@@ -17,10 +17,3 @@ spec:
             name: gateway
             port:
               number: 80
-      - path: /rabbitmq(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: rabbitmq
-            port:
-              number: 15672
