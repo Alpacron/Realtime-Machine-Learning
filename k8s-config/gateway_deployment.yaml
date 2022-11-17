@@ -4,6 +4,7 @@ metadata:
   name: gateway
   labels:
     app: gateway
+  namespace: rml
 spec:
   replicas: 1
   selector:
