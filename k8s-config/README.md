@@ -33,7 +33,7 @@ microk8s kubectl create secret generic global-secret --from-file=repo/k8s-config
 ### Updating the cluster
 First delete the old files:
 ```commandline
-microk8s kubectl delete -f repo/k8s-config && rm -rf repo
+microk8s kubectl delete -f repo/k8s-config/rml && rm -rf repo
 ```
 
 Then apply the latest version:
