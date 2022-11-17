@@ -1,22 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-app
+  name: auth-deployment
   namespace: rml
   labels:
-    app: auth-app
+    app: auth
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: auth-app
+      app: auth
   template:
     metadata:
       labels:
-        app: auth-app
+        app: auth
     spec:
       containers:
-      - name: auth-app
+      - name: auth
         image: alpacron/auth:latest
         imagePullPolicy: Always
         ports:
