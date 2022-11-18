@@ -1,5 +1,5 @@
-<h1 align="center">K8S - Realtime Machine Learning</h1>
-<h4 align="center"><strong>Aron Hemmes</strong></h4>
+<h1 align="center">K8S - ANTIVALOR</h1>
+<h4 align="center"><strong>Semester 6 Individual - Aron Hemmes</strong></h4>
 <p align="center">Setup of the kubernetes environment.</p>
 <br><br>
 
