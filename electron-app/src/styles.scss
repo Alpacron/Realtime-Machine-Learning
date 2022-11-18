@@ -1,0 +1,46 @@
+@import './font.scss';
+@import './general.scss';
+
+a {
+    color: #ff4654;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+        text-decoration: underline;
+    }
+}
+
+.button {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #ff4654;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+
+    &.small {
+        padding: 8px;
+        border-radius: 8px;
+    }
+
+    &:hover,
+    &:focus-visible {
+        background: #c73541;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.error {
+    font-size: 13px;
+    text-align: center;
+    color: #ff4654;
+    opacity: 0.7;
+}
+
+main {
+    padding: 16px;
+}
