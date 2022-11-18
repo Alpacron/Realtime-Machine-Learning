@@ -3,12 +3,12 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import Account, { View } from './Account';
 
-describe('<Account />', () => {
+describe('<SignIn />', () => {
   test('it should mount', () => {
     render(<Account view={View.signin} />);
 
-    const account = screen.getByTestId('Account');
+    const signin = screen.getByTestId('SignIn');
 
-    expect(account).toBeInTheDocument();
+    expect(signin).toBeInTheDocument();
   });
 });

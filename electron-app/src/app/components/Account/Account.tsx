@@ -1,11 +1,11 @@
-import { FC, useContext, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import styles from './Account.module.scss';
 import SignInForm from './SignIn/SignIn';
-import SignUp from './SignUp/SignUp';
-import ResetPW from './ResetPW/ResetPW';
+import SignUpForm from './SignUp/SignUp';
+import ResetPWForm from './ResetPW/ResetPW';
 import { ApiResult } from '../../api/request';
-import { SignIn } from '../../api/account';
-import { context } from '../../../App';
+import { ResetPW, SignIn, SignUp } from '../../api/account';
+import { AppContext, context } from '../../../App';
 
 export enum View {
   signin = "signin",
@@ -56,11 +56,12 @@ const Account: FC<AccountProps> = ({ view }: AccountProps) => {
     }
   };
 
-  const onSignIn = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>, ApiCall: (context: AppContext, account: AccountState) => Promise<ApiResult>) => {
     e.preventDefault();
 
     setAccount(a => ({ ...a, ...errorState }));
-    SignIn(appContext, account.email, account.password).then(r => {
+    ApiCall(appContext, account).then(r => {
+      console.log(r.ok);
       if (!r.ok)
         handleErrors(r);
     });
@@ -68,11 +69,22 @@ const Account: FC<AccountProps> = ({ view }: AccountProps) => {
 
   const currentView = (view: View) => {
     return view === View.signin
-      ? <SignInForm onSignIn={onSignIn} state={account} setState={setAccount} />
+      ? <SignInForm onSignIn={e => onSubmit(e, SignIn)} state={account} setState={setAccount} />
       : view === View.signup
-        ? <SignUp />
-        : <ResetPW />;
+        ? <SignUpForm onSignUp={e => onSubmit(e, SignUp)} state={account} setState={setAccount} />
+        : <ResetPWForm onResetPW={e => onSubmit(e, ResetPW)} state={account} setState={setAccount} />;
   };
+
+  useEffect(() => {
+    setAccount({
+      ...({
+        username: "",
+        email: "",
+        password: ""
+      }),
+      ...errorState
+    });
+  }, [view]);
 
   return (
     <section data-testid="Account" className={styles.Account}>
