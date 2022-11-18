@@ -1,6 +1,6 @@
 <h1 align="center">K8S - ANTIVALOR</h1>
 <h4 align="center"><strong>Semester 6 Individual - Aron Hemmes</strong></h4>
-<p align="center">Setup of the kubernetes environment.</p>
+<p align="center">Setup of the kubernetes environment on a ubuntu server.</p>
 <br><br>
 
 ## Setup
