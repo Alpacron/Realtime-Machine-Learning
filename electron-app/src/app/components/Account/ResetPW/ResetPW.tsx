@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 
-interface AccountResetPwProps { }
+interface ResetPwProps { }
 
-const AccountResetPw: FC<AccountResetPwProps> = () => (
-  <div data-testid="AccountResetPw">
-    AccountResetPw Component
+const ResetPw: FC<ResetPwProps> = () => (
+  <div data-testid="ResetPw">
+    ResetPw Component
   </div>
 );
 
-export default AccountResetPw;
+export default ResetPw;

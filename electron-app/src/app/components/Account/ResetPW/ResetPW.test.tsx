@@ -1,14 +1,14 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import AccountResetPw from './ResetPW';
+import ResetPw from './ResetPw';
 
-describe('<AccountResetPw />', () => {
+describe('<ResetPw />', () => {
   test('it should mount', () => {
-    render(<AccountResetPw />);
+    render(<ResetPw />);
+    
+    const resetPw = screen.getByTestId('ResetPw');
 
-    const accountResetPw = screen.getByTestId('AccountResetPw');
-
-    expect(accountResetPw).toBeInTheDocument();
+    expect(resetPw).toBeInTheDocument();
   });
 });

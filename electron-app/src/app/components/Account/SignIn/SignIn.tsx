@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 
-interface AccountSignInProps { }
+interface SignInProps { }
 
-const AccountSignIn: FC<AccountSignInProps> = () => (
-  <div data-testid="AccountSignIn">
-    AccountSignIn Component
+const SignIn: FC<SignInProps> = () => (
+  <div data-testid="SignIn">
+    SignIn Component
   </div>
 );
 
-export default AccountSignIn;
+export default SignIn;
