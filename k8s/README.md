@@ -21,7 +21,7 @@ microk8s enable portainer
 ### Setting up the cluster for the first time
 To setup the cluster first run:
 ```commandline
-microk8s kubectl create namespace rml ; git clone https://github.com/Alpacron/Realtime-Machine-Learning repo
+microk8s kubectl create namespace rml ; git clone https://github.com/Alpacron/antivalor repo
 ```
 
 Then enter some secrets in the secrets file:
@@ -43,7 +43,7 @@ microk8s kubectl delete -f repo/k8s/config && rm -rf repo
 
 Then apply the latest version:
 ```commandline
-git clone https://github.com/Alpacron/Realtime-Machine-Learning repo ; microk8s kubectl apply -f repo/k8s/config
+git clone https://github.com/Alpacron/antivalor repo ; microk8s kubectl apply -f repo/k8s/config
 ```
 
 ### To clean up the cluster
