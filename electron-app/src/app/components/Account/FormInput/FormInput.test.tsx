@@ -5,8 +5,8 @@ import FormInput from './FormInput';
 
 describe('<FormInput />', () => {
   test('it should mount', () => {
-    render(<FormInput />);
-    
+    render(<FormInput name="Email" id="email" type="email" autoComplete="email" error="" value="" onChange={() => { }} />);
+
     const formInput = screen.getByTestId('FormInput');
 
     expect(formInput).toBeInTheDocument();

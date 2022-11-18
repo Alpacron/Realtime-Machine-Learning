@@ -12,6 +12,8 @@ interface AppContext {
   setSignedIn: Dispatch<SetStateAction<boolean | undefined>>;
 }
 
+let context: React.Context<AppContext>;
+
 function App() {
   const [signedIn, setSignedIn] = useState<boolean | undefined>();
 
@@ -20,24 +22,27 @@ function App() {
     setSignedIn: setSignedIn
   };
 
-  const context: React.Context<AppContext> = React.createContext(contextValue);
+  context = React.createContext(contextValue);
 
   return (
-    <context.Provider value={contextValue}>
-      <Router>
-        <Routes>
-          <Route path="account">
-            <Route path="signin" element={<Account view={View.signin} />} />
-            <Route path="signup" element={<Account view={View.signup} />} />
-            <Route path="reset_password" element={<Account view={View.resetpw} />} />
-            <Route path="" element={<Navigate to="/account/signin" replace />} />
-          </Route>
-          <Route path="*" element={<Navigate to="/account/signin" replace />} />
-        </Routes>
-      </Router>
-    </context.Provider>
+    <div data-testid="App">
+      <context.Provider value={contextValue}>
+        <Router>
+          <Routes>
+            <Route path="account">
+              <Route path="signin" element={<Account view={View.signin} />} />
+              <Route path="signup" element={<Account view={View.signup} />} />
+              <Route path="reset_password" element={<Account view={View.resetpw} />} />
+              <Route path="" element={<Navigate to="/account/signin" replace />} />
+            </Route>
+            <Route path="*" element={<Navigate to="/account/signin" replace />} />
+          </Routes>
+        </Router>
+      </context.Provider>
+    </div>
   );
 }
 
 export default App;
+export { context };
 export type { AppContext };
