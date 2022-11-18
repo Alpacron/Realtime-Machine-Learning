@@ -19,26 +19,26 @@ To setup the cluster first run:
 microk8s kubectl create namespace rml ; git clone https://github.com/Alpacron/Realtime-Machine-Learning repo
 ```
 
-Then enter the secrets in the secrets file:
+Then enter some secrets in the secrets file:
 ```commandline
-nano repo/k8s-config/appsettings.secrets.json
+nano repo/kubernetes/appsettings.secrets.json
 ```
 
 Now we can apply the secrets and config files:
 ```commandline
-microk8s kubectl create secret generic global-secret --from-file=repo/k8s-config/appsettings.secrets.json -n rml\
-&& microk8s kubectl apply -f repo/k8s-config/rml
+microk8s kubectl create secret generic global-secret --from-file=repo/kubernetes/appsettings.secrets.json -n rml\
+&& microk8s kubectl apply -f repo/kubernetes/config
 ```
 
 ### Updating the cluster
 First delete the old files:
 ```commandline
-microk8s kubectl delete -f repo/k8s-config/rml && rm -rf repo
+microk8s kubectl delete -f repo/kubernetes/config && rm -rf repo
 ```
 
 Then apply the latest version:
 ```commandline
-git clone https://github.com/Alpacron/Realtime-Machine-Learning repo && microk8s kubectl apply -f repo/k8s-config/rml
+git clone https://github.com/Alpacron/Realtime-Machine-Learning repo && microk8s kubectl apply -f repo/kubernetes/config
 ```
 
 ### To clean up the cluster

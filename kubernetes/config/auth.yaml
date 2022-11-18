@@ -32,3 +32,35 @@ spec:
       - name: secrets
         secret:
           secretName: global-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: rml
+spec:
+  selector:
+    app: auth
+  ports:
+    - name: port1
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: port2
+      protocol: TCP
+      port: 443
+      targetPort: 443
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: auth-auto-scaling
+  namespace: rml
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: auth-deployment
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
