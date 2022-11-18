@@ -29,13 +29,13 @@ function App() {
   return (
     <div data-testid="App">
       <context.Provider value={contextValue}>
-        <Router />
+        <AppRouter />
       </context.Provider>
     </div>
   );
 }
 
-function Router() {
+function AppRouter() {
   const appContext = useContext(context);
 
   useEffect(() => {
