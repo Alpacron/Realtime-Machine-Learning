@@ -1,24 +1,27 @@
-<h1 align="center">Realtime Machine Learning</h1>
-<h4 align="center"><strong>Aron Hemmes</strong></h4>
+<h1 align="center">ANTIVALOR</h1>
+<h4 align="center"><strong>Semester 6 Individual - Aron Hemmes</strong></h4>
 <p align="center">An implementation of object recognition and AI in the environment of a game called Valorant.</p>
 <br><br>
 
 ## Implementation
 I decided to make an interactive desktop application which records the game, executes actions in the game and visualises the environment state.
 
-> The latest release of the desktop application can be found: [here](/releases/latest)
+To start download the latest version of the app and the game Valorant.
 
-> The current backend environment is setup on a vm in netlab on: [192.168.240.10](http://192.168.240.10/api)
+> The latest release of the desktop application can be found: [here](../../releases/latest)
+
+> The current backend environment is deployed on a vm in netlab on: [192.168.240.10](http://192.168.240.10/api)
 
 ## Getting Started
 
 ### Prerequisites
 
-- Valorant (game)
+- Valorant
 - Node
+- Docker
 
 ### Setup
-To run the whole backend server on microk8s see the [k8s cluster setup](./kubernetes/README.md) document.
+To run the server on microk8s see the [k8s cluster setup](./k8s/README.md) document.
 
 Then run the client app and valorant on your local machine:
 - [client app setup](./client-app/README.md) document.
