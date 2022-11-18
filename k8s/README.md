@@ -1,4 +1,9 @@
-# Kubernetes server setup
+<h1 align="center">K8S - Realtime Machine Learning</h1>
+<h4 align="center"><strong>Aron Hemmes</strong></h4>
+<p align="center">Setup of the kubernetes environment.</p>
+<br><br>
+
+## Setup
 
 ### Initial set-up microk8s on netlab with k8s template
 ```commandline
