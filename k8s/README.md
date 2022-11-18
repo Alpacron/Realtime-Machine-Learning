@@ -5,20 +5,20 @@
 
 ## Setup
 
-### Initial set-up microk8s on netlab with k8s template
+### Setup micok8s
 ```commandline
 sudo snap refresh microk8s --channel=1.25/stable
 microk8s enable dns
 microk8s enable ingress
 ```
 
-Optionally:
+Install portainer (optional):
 ```commandline
 microk8s enable community
 microk8s enable portainer
 ```
 
-### Setting up the cluster for the first time
+### Setup cluster
 To setup the cluster first run:
 ```commandline
 microk8s kubectl create namespace rml ; git clone https://github.com/Alpacron/antivalor repo
@@ -35,7 +35,7 @@ microk8s kubectl create secret generic global-secret --from-file=repo/k8s/appset
 && microk8s kubectl apply -f repo/k8s/config
 ```
 
-### Updating the cluster
+### Update cluster
 First delete the old files:
 ```commandline
 microk8s kubectl delete -f repo/k8s/config && rm -rf repo
@@ -46,7 +46,7 @@ Then apply the latest version:
 git clone https://github.com/Alpacron/antivalor repo ; microk8s kubectl apply -f repo/k8s/config
 ```
 
-### To clean up the cluster
+### Clean up cluster
 Delete repo and namespace:
 ```commandline
 rm -rf repo ; microk8s kubectl delete namespace rml
