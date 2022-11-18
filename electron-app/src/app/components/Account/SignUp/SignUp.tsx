@@ -12,7 +12,7 @@ interface SignUpProps {
 const SignUp: FC<SignUpProps> = ({ onSignUp, state, setState }: SignUpProps) => (
   <form onSubmit={onSignUp} data-testid="SignUp">
     <h2>ANTIVALOR</h2>
-    <legend>Request account</legend>
+    <legend>Register</legend>
 
     <FormInput name="Username" id="username" type="text" autoComplete="name" error={state.username_error} value={state.username} onChange={e => setState(a => ({ ...a, username: e.target.value }))} />
     <FormInput name="Email" id="email" type="email" autoComplete="email" error={state.email_error} value={state.email} onChange={e => setState(a => ({ ...a, email: e.target.value }))} />

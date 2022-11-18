@@ -59,9 +59,8 @@ const Account: FC<AccountProps> = ({ view }: AccountProps) => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>, ApiCall: (context: AppContext, account: AccountState) => Promise<ApiResult>) => {
     e.preventDefault();
 
-    setAccount(a => ({ ...a, ...errorState }));
     ApiCall(appContext, account).then(r => {
-      console.log(r.ok);
+      setAccount(a => ({ ...a, ...errorState }));
       if (!r.ok)
         handleErrors(r);
     });

@@ -3,7 +3,6 @@ body {
     padding: 0;
     font-family: 'Gotham Rounded', 'verdana', sans-serif;
     user-select: none;
-    background-color: black;
 }
 
 code,
@@ -21,11 +20,8 @@ p {
     margin: 0;
 }
 
-.error {
-    font-size: 13px;
-    text-align: center;
-    color: #ff4654;
-    opacity: 0.7;
+h2 {
+    font-family: 'Commando', 'Gotham Rounded', 'verdana', sans-serif;
 }
 
 button,
