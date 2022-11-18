@@ -24,7 +24,7 @@ To start download the latest version of the app and the game Valorant.
 To run the server on microk8s see the [k8s cluster setup](./k8s/README.md) document.
 
 Then run the client app and valorant on your local machine:
-- [client app setup](./client-app/README.md) document.
+- [electron app setup](./electron-app/README.md) document.
 
 ## License
 This project is licensed under the [MIT](https://opensource.org/licenses/MIT) license.
