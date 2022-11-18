@@ -1,8 +1,8 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import styles from './Account.module.scss';
-import SignInForm from './SignIn/SignIn';
-import SignUpForm from './SignUp/SignUp';
-import ResetPWForm from './ResetPW/ResetPW';
+import SignInForm from './SignIn';
+import SignUpForm from './SignUp';
+import ResetPWForm from './ResetPW';
 import { ApiResult } from '../../api/request';
 import { ResetPW, SignIn, SignUp } from '../../api/account';
 import { AppContext, context } from '../../../App';

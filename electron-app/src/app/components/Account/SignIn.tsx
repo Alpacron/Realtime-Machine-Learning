@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { Link } from "react-router-dom";
-import { AccountState } from '../Account';
-import FormInput from '../FormInput/FormInput';
+import { AccountState } from './Account';
+import FormInput from './FormInput';
 
 interface SignInProps {
   onSignIn: (e: React.FormEvent<HTMLFormElement>) => void;

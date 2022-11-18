@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, FC, SetStateAction, SyntheticEvent } from 'react';
+import React, { FC } from 'react';
 import styles from './FormInput.module.scss';
 
 interface FormInputProps {
