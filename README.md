@@ -8,7 +8,7 @@ I decided to make an interactive desktop application which records the game, exe
 
 > The latest release of the desktop application can be found: [here](/releases/latest)
 
-> The current backend environment is setup on a vm in netlab on: [192.168.240.10](http://192.168.240.10)
+> The current backend environment is setup on a vm in netlab on: [192.168.240.10](http://192.168.240.10/api)
 
 ## Getting Started
 
