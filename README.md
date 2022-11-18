@@ -18,7 +18,7 @@ I decided to make an interactive desktop application which records the game, exe
 - Node
 
 ### Setup
-To run the whole backend server on microk8s see the [k8s cluster setup](./k8s-config/README.md) document.
+To run the whole backend server on microk8s see the [k8s cluster setup](./kubernetes/README.md) document.
 
 Then run the client app and valorant on your local machine:
 - [client app setup](./client-app/README.md) document.
