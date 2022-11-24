@@ -2,8 +2,10 @@ name: ☁ Auth Service | Sonar
 
 on:
   push:
+    paths: [ "services/auth/**", ".github/workflows/auth-service-sonar.yml" ]
     branches: main
   pull_request:
+    paths: [ "services/auth/**", ".github/workflows/auth-service-sonar.yml" ]
     types: [opened, synchronize, reopened]
 
 jobs:
@@ -46,6 +48,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_AUTH }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"rml-auth-service" /o:"alpacron" /d:sonar.login="${{ secrets.SONAR_AUTH }}" /d:sonar.host.url="https://sonarcloud.io"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"auth_antivalor" /o:"alpacron" /d:sonar.login="${{ secrets.SONAR_AUTH }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build services/auth
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_AUTH }}"
