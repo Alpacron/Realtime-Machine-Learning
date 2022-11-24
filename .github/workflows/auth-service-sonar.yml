@@ -3,10 +3,10 @@ name: ☁ Auth Service | Sonar
 on:
   push:
     paths: [ "services/auth/**", ".github/workflows/auth-service-sonar.yml" ]
-    branches: [ "main" ]
+    branches: main
   pull_request:
     paths: [ "services/auth/**", ".github/workflows/auth-service-sonar.yml" ]
-    branches: [ "main" ]
+    branches: main
 
 jobs:
   build:
