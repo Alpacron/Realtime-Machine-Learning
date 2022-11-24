@@ -8,10 +8,10 @@ env:
 
 on:
   push:
-    paths: [ "$workdir/**", ".github/workflows/auth-service-sonar.yml" ]
+    paths: [ "${{ env.workdir }}/**", ".github/workflows/auth-service-sonar.yml" ]
     branches: main
   pull_request:
-    paths: [ "$workdir/**", ".github/workflows/auth-service-sonar.yml" ]
+    paths: [ "${{ env.workdir }}/**", ".github/workflows/auth-service-sonar.yml" ]
     types: [opened, synchronize, reopened]
 
 jobs:
