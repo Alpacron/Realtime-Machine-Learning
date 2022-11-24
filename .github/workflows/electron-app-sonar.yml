@@ -1,6 +1,8 @@
 name: ☁ Electron App | Sonar
 
 env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  SONAR_TOKEN: ${{ secrets.SONAR_ELECTRON }}
   workdir: electron-app
 
 on:
@@ -35,6 +37,3 @@ jobs:
       - uses: SonarSource/sonarcloud-github-action@master
         with:
           projectBaseDir: ${{ env.workdir }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_ELECTRON }}
