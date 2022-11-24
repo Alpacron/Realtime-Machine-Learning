@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: SonarScanner
+    name: ☁ SonarCloud
     runs-on: windows-latest
     steps:
       - name: Set up JDK 11
@@ -39,13 +39,15 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      - name: Test
+        shell: powershell
+        run: dotnet test services/auth/Authservice.Tests/Authservice.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_AUTH_SERVICE }}
+          SONAR_TOKEN: ${{ secrets.SONAR_AUTH }}
         shell: powershell
         run: |
-          dotnet test services/auth/Authservice.Tests/Authservice.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"rml-auth-service" /o:"alpacron" /d:sonar.login="${{ secrets.SONAR_AUTH_SERVICE }}" /d:sonar.host.url="https://sonarcloud.io"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"rml-auth-service" /o:"alpacron" /d:sonar.login="${{ secrets.SONAR_AUTH }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build services/auth
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_AUTH_SERVICE }}"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_AUTH }}"
