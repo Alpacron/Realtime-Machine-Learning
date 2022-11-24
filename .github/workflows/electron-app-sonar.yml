@@ -1,0 +1,37 @@
+name: ☁ Electron App | Sonar
+
+on:
+  push:
+    paths: [ "electron-app/**", ".github/workflows/electron-app-sonar.yml" ]
+    branches: main
+  pull_request:
+    paths: [ "electron-app/**", ".github/workflows/electron-app-sonar.yml" ]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    name: SonarScanner
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install Dependencies
+        run: |
+          cd electron-app
+          npm ci
+      - name: Test
+        run: |
+          cd electron-app
+          npm test -- --coverage
+      - uses: sonarsource/sonarqube-scan-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_ELECTRON }}
