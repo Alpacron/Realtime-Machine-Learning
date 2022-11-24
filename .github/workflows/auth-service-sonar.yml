@@ -71,5 +71,4 @@ jobs:
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"${{ env.project }}" /o:"alpacron" /d:sonar.login="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
           dotnet build ${{ env.workdir }}
-          .\.sonar\coverage\dotnet-coverage collect 'dotnet test ${{ env.workdir }}' -f xml -o 'coverage.xml'
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ env.SONAR_TOKEN }}"
