@@ -7,10 +7,10 @@ env:
 
 on:
   push:
-    paths: [ "${{ env.workdir }}/**", ".github/workflows/electron-app-sonar.yml" ]
+    paths: [ "electron-app/**", ".github/workflows/electron-app-sonar.yml" ]
     branches: main
   pull_request:
-    paths: [ "${{ env.workdir }}/**", ".github/workflows/electron-app-sonar.yml" ]
+    paths: [ "electron-app/**", ".github/workflows/electron-app-sonar.yml" ]
     types: [opened, synchronize, reopened]
 
 jobs:
