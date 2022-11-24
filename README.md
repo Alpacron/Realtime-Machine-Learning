@@ -10,8 +10,6 @@ To start download the latest version of the app and the game Valorant.
 
 > The latest release of the desktop application can be found: [here](../../releases/latest)
 
-> The current backend environment is deployed on a vm in netlab on: [192.168.240.10](http://192.168.240.10/api)
-
 ## Getting Started
 
 ### Prerequisites
@@ -24,7 +22,7 @@ To start download the latest version of the app and the game Valorant.
 To run the server on microk8s see the [k8s cluster setup](./k8s/README.md) document.
 
 Then run the client app and valorant on your local machine:
-- [client app setup](./client-app/README.md) document.
+- [electron app setup](./electron-app/README.md) document.
 
 ## License
 This project is licensed under the [MIT](https://opensource.org/licenses/MIT) license.
