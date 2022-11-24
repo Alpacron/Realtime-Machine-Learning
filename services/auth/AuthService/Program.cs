@@ -3,6 +3,7 @@ using AuthService.Helpers;
 using AuthService.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +12,12 @@ builder.Configuration.AddJsonFile("secrets/appsettings.secrets.json", true);
 builder.Services.Configure<Jwt>(builder.Configuration.GetSection("Jwt"));
 
 // Add db connection
+var conStrBuilder = new MySqlConnectionStringBuilder(
+    builder.Configuration.GetConnectionString("DBConnectionString"));
+var connection = conStrBuilder.ConnectionString;
+
 builder.Services.AddDbContext<AuthContext>(options =>
-        options.UseSqlServer(builder.Configuration["ConnectionStrings:UserDB"]));
+  options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
 
 // Add services to the container.
 builder.Services.AddControllers();
