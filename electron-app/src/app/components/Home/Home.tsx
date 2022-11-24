@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 import { context } from '../../../App';
-import { SignOut } from '../../api/account';
+import { SignOut } from '../../services/account';
 import styles from './Home.module.scss';
 
 interface HomeProps { }

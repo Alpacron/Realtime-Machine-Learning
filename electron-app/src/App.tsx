@@ -1,11 +1,11 @@
-import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import {
   BrowserRouter,
   Routes,
   Route,
   Navigate
 } from "react-router-dom";
-import { IsSignedIn } from './app/api/account';
+import { IsSignedIn } from './app/services/account';
 import Account, { View } from './app/components/Account/Account';
 import Home from './app/components/Home/Home';
 
@@ -14,7 +14,7 @@ interface AppContext {
   setSignedIn: Dispatch<SetStateAction<boolean | undefined>>;
 }
 
-let context: React.Context<AppContext>;
+const context: React.Context<AppContext> = React.createContext({} as AppContext);
 
 function App() {
   const [signedIn, setSignedIn] = useState<boolean | undefined>();
@@ -23,8 +23,6 @@ function App() {
     signedIn: signedIn,
     setSignedIn: setSignedIn
   };
-
-  context = React.createContext(contextValue);
 
   return (
     <div data-testid="App">
