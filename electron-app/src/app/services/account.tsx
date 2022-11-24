@@ -33,13 +33,11 @@ async function SignUp(context: AppContext, account: AccountState): Promise<ApiRe
 }
 
 async function ResetPW(_context: AppContext, _account: AccountState): Promise<ApiResult> {
-    return new Promise<ApiResult>((resolve) => {
-        resolve({
-            ok: false,
-            result: {
-                title: "not yet implemented"
-            }
-        });
+    return Promise.resolve({
+        ok: false,
+        result: {
+            title: "not yet implemented"
+        }
     });
 }
 

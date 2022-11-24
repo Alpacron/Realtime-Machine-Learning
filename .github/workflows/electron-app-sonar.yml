@@ -1,16 +1,19 @@
 name: ☁ Electron App | Sonar
 
+env:
+  workdir: electron-app
+
 on:
   push:
-    paths: [ "electron-app/**", ".github/workflows/electron-app-sonar.yml" ]
+    paths: [ "$workdir/**", ".github/workflows/electron-app-sonar.yml" ]
     branches: main
   pull_request:
-    paths: [ "electron-app/**", ".github/workflows/electron-app-sonar.yml" ]
+    paths: [ "$workdir/**", ".github/workflows/electron-app-sonar.yml" ]
     types: [opened, synchronize, reopened]
 
 jobs:
   build:
-    name: SonarScanner
+    name: Build and Analyse
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -24,14 +27,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
-        run: |
-          cd electron-app
-          npm ci
+        working-directory: ${{ env.workdir }}
+        run: npm ci
       - name: Test
-        run: |
-          cd electron-app
-          npm test -- --coverage
+        working-directory: ${{ env.workdir }}
+        run: npm test -- --coverage
       - uses: SonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: ${{ env.workdir }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_ELECTRON }}
