@@ -1,4 +1,4 @@
-name: Auth Service - Sonar
+name: ☁ Auth Service | Sonar
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: ☁ SonarCloud
+    name: Build and Analyse
     runs-on: windows-latest
     steps:
       - name: Set up JDK 11
