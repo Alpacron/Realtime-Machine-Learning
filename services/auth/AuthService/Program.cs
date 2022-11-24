@@ -72,10 +72,7 @@ app.ConfigureExceptionHandler();
 
 app.UseHttpsRedirection();
 
-app.UseCors(x => x
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader());
+app.UseCors();
 
 app.UseMiddleware<JwtMiddleware>();
 
