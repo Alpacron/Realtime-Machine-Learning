@@ -1,6 +1,7 @@
-const { app, BrowserWindow, Menu, Tray, nativeImage } = require('electron');
+const { app, BrowserWindow, Menu, Tray, nativeImage, ipcMain, desktopCapturer } = require('electron');
 
-const icon = nativeImage.createFromPath(__dirname + "/public/icon.ico");
+const maindir = __dirname.substring(0, __dirname.lastIndexOf('\\'));
+const icon = nativeImage.createFromPath(maindir + "/public/icon.ico");
 const isDev = !app.isPackaged;
 let mainWindow;
 let tray;
@@ -13,7 +14,8 @@ function createWindow() {
         icon: icon,
         autoHideMenuBar: true,
         webPreferences: {
-            devTools: isDev
+            devTools: isDev,
+            preload: __dirname + '/preload.js'
         }
     });
 
@@ -62,6 +64,29 @@ function createTray() {
     });
 }
 
+async function screenshot(_event, title) {
+    var _resolve;
+    var _reject;
+    desktopCapturer.getSources({
+        types: ['window'], thumbnailSize: {
+            height: 500,
+            width: 500
+        }
+    })
+        .then(sources => {
+            sources.forEach(source => {
+                if (source.name && source.name.includes(title))
+                    _resolve(source.thumbnail.toDataURL());
+            });
+            _reject(`Application with title ${title} not found in ${sources.map(s => s.name).join(", ")}.`);
+        });
+
+    return new Promise(function (resolve, reject) {
+        _resolve = resolve;
+        _reject = reject;
+    });
+}
+
 if (!app.requestSingleInstanceLock()) {
     app.quit();
 } else {
@@ -70,11 +95,12 @@ if (!app.requestSingleInstanceLock()) {
     });
 
     app.whenReady().then(() => {
+        ipcMain.handle('screenshot', screenshot);
         createWindow();
     });
 
     app.on('before-quit', () => {
-        mainWindow.destroy();
         tray.destroy();
+        mainWindow.destroy();
     });
 }

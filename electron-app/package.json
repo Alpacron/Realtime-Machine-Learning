@@ -1,7 +1,7 @@
 {
   "name": "antivalor",
   "version": "0.1.0",
-  "main": "main.js",
+  "main": "electron/main.js",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
