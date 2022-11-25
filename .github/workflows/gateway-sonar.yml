@@ -1,0 +1,74 @@
+name: ☁ Gateway | Sonar
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  SONAR_TOKEN: ${{ secrets.SONAR_GATEWAY }}
+  workdir: gateway
+  project: gateway_antivalor
+
+on:
+  push:
+    paths: [ "gateway/**", ".github/workflows/gateway-sonar.yml" ]
+    branches: main
+  pull_request:
+    paths: [ "gateway/**", ".github/workflows/gateway-sonar.yml" ]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    name: Build and Analyse
+    runs-on: windows-latest
+    steps:
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.11
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~\sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache SonarCloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v1
+        with:
+          path: .\.sonar\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+      - name: Install SonarCloud scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+
+      - name: Cache coverage
+        id: cache-coverage
+        uses: actions/cache@v1
+        with:
+          path: .\.sonar\coverage
+          key: ${{ runner.os }}-coverage
+          restore-keys: ${{ runner.os }}-coverage
+      - name: Install Coverage
+        if: steps.cache-coverage.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          New-Item -Path .\.sonar\coverage -ItemType Directory
+          dotnet tool update dotnet-coverage --tool-path .\.sonar\coverage
+
+      - name: Test
+        shell: powershell
+        run: .\.sonar\coverage\dotnet-coverage collect 'dotnet test ${{ env.workdir }}' -f xml -o 'coverage.xml'
+
+      - name: Build and analyse
+        shell: powershell
+        run: |
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"${{ env.project }}" /o:"alpacron" /d:sonar.login="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          dotnet build ${{ env.workdir }}
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ env.SONAR_TOKEN }}"
