@@ -1,36 +1,42 @@
 {
   "name": "antivalor",
-  "version": "0.1.0",
-  "main": "electron/main.js",
+  "version": "0.2.0",
   "private": true,
+  "author": "alpacron",
+  "description": "ANTIVALOR App",
+  "homepage": "./",
+  "main": "./public/electron.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "electron:dev": "concurrently \"cross-env BROWSER=none react-scripts start\" \"wait-on tcp:3000 && electron .\""
+    "start": "concurrently -k \"cross-env BROWSER=none yarn react:start\" \"wait-on http://localhost:3000 && electronmon .\"",
+    "package": "yarn react:build && electron-builder -w -c.extraMetadata.main=build/electron.js",
+    "react:start": "react-scripts start",
+    "react:build": "react-scripts build",
+    "react:eject": "react-scripts eject"
   },
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.3",
-    "@types/react": "^18.0.25",
-    "@types/react-dom": "^18.0.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.3",
-    "react-scripts": "5.0.1",
-    "sass": "^1.56.1",
-    "typescript": "^4.9.3",
-    "web-vitals": "^2.1.4"
+    "electron-store": "^8.1.0",
+    "react-scripts": "5.0.1"
   },
   "devDependencies": {
-    "concurrently": "^7.5.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^29.2.3",
+    "@types/node": "^18.11.9",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.9",
+    "concurrently": "^6.2.1",
     "cross-env": "^7.0.3",
-    "electron": "^21.3.0",
-    "wait-on": "^6.0.1"
+    "electron": "^13.1.9",
+    "electron-builder": "^22.11.7",
+    "electronmon": "^2.0.1",
+    "sass": "^1.56.1",
+    "typescript": "^4.9.3",
+    "wait-on": "^6.0.0"
   },
   "eslintConfig": {
     "extends": [
@@ -40,14 +46,24 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "last 1 electron version"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 electron version"
     ]
+  },
+  "build": {
+    "appId": "antivalor",
+    "productName": "ANTIVALOR",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "public"
+    },
+    "win": {
+      "target": "nsis"
+    }
   }
 }
