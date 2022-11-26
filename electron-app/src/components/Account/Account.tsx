@@ -3,9 +3,7 @@ import styles from './Account.module.scss';
 import SignInForm from './SignIn';
 import SignUpForm from './SignUp';
 import ResetPWForm from './ResetPW';
-import { ApiResult } from '../../services/request';
-import { ResetPW, SignIn, SignUp } from '../../services/account';
-import { AppContext, context } from '../../../App';
+import { AppContext, context } from '../../App';
 
 export enum View {
   signin = "signin",
@@ -27,7 +25,7 @@ interface AccountState {
   password_error: string;
 };
 
-const errorState = {
+const defaultErrorState = {
   error: "",
   username_error: "",
   email_error: "",
@@ -42,10 +40,10 @@ const Account: FC<AccountProps> = ({ view }: AccountProps) => {
       email: "",
       password: ""
     }),
-    ...errorState
+    ...defaultErrorState
   });
 
-  const handleErrors = (response: ApiResult) => {
+  const handleErrors = (response: any) => {
     const { result } = response;
 
     setAccount(a => ({ ...a, error: result.title }));
@@ -56,22 +54,25 @@ const Account: FC<AccountProps> = ({ view }: AccountProps) => {
     }
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>, ApiCall: (context: AppContext, account: AccountState) => Promise<ApiResult>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>, ApiCall: (account: AccountState) => Promise<any>) => {
     e.preventDefault();
 
-    ApiCall(appContext, account).then(r => {
-      setAccount(a => ({ ...a, ...errorState }));
-      if (!r.ok)
+    ApiCall(account).then(r => {
+      setAccount(a => ({ ...a, ...defaultErrorState }));
+      if (r.ok) {
+        appContext.setSignedIn(true);
+      } else {
         handleErrors(r);
+      }
     });
   };
 
   const currentView = (view: View) => {
     return view === View.signin
-      ? <SignInForm onSignIn={e => onSubmit(e, SignIn)} state={account} setState={setAccount} />
+      ? <SignInForm onSignIn={e => onSubmit(e, window.electron.signin)} state={account} setState={setAccount} />
       : view === View.signup
-        ? <SignUpForm onSignUp={e => onSubmit(e, SignUp)} state={account} setState={setAccount} />
-        : <ResetPWForm onResetPW={e => onSubmit(e, ResetPW)} state={account} setState={setAccount} />;
+        ? <SignUpForm onSignUp={e => onSubmit(e, window.electron.signup)} state={account} setState={setAccount} />
+        : <ResetPWForm onResetPW={e => onSubmit(e, window.electron.resetpw)} state={account} setState={setAccount} />;
   };
 
   useEffect(() => {
@@ -81,7 +82,7 @@ const Account: FC<AccountProps> = ({ view }: AccountProps) => {
         email: "",
         password: ""
       }),
-      ...errorState
+      ...defaultErrorState
     });
   }, [view]);
 

@@ -20,13 +20,11 @@ builder.Services.AddAuthentication(options =>
 {
     o.TokenValidationParameters = new TokenValidationParameters
     {
-
-        IssuerSigningKey = new SymmetricSecurityKey
-            (Encoding.UTF8.GetBytes(securityKey)),
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey)),
         ValidateIssuer = false,
         ValidateAudience = false,
-
-        ValidateIssuerSigningKey = true
+        ClockSkew = TimeSpan.Zero
     };
 });
 
@@ -41,10 +39,7 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-app.UseCors(x => x
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader());
+app.UseCors();
 
 app.UseAuthentication();
 

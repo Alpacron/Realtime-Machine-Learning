@@ -1,13 +1,7 @@
 import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate
-} from "react-router-dom";
-import { IsSignedIn } from './app/services/account';
-import Account, { View } from './app/components/Account/Account';
-import Home from './app/components/Home/Home';
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
+import Account, { View } from './components/Account/Account';
+import Home from './components/Home/Home';
 
 interface AppContext {
   signedIn: boolean | undefined;
@@ -37,7 +31,9 @@ function AppRouter() {
   const appContext = useContext(context);
 
   useEffect(() => {
-    IsSignedIn(appContext).then((signedIn) => appContext.setSignedIn(signedIn));
+    window.electron.issignedin().then((signedin: boolean) => {
+      appContext.setSignedIn(signedin);
+    });
   }, []);
 
   const currentRoutes = (signedIn: boolean | undefined) => {
@@ -66,9 +62,9 @@ function AppRouter() {
   };
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       {currentRoutes(appContext.signedIn)}
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

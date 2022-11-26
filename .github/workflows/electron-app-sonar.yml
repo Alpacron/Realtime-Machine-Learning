@@ -30,10 +30,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
         working-directory: ${{ env.workdir }}
-        run: npm ci
+        run: yarn
       - name: Test
         working-directory: ${{ env.workdir }}
-        run: npm test -- --coverage
+        run: yarn test -- --coverage
       - uses: SonarSource/sonarcloud-github-action@master
         with:
           projectBaseDir: ${{ env.workdir }}
