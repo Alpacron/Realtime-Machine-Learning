@@ -1,8 +1,7 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import Home from './Home';
-import { context } from './../../../App';
+import { context } from './../../App';
 
 describe('<Home />', () => {
   beforeEach(() => {
