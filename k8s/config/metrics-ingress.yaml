@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: metrics-ingress
+  namespace: kube-system
+  annotations:
+    kubernetes.io/ingress.class: public
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /metrics(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: metrics-server
+            port:
+              number: 443
