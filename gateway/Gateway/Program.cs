@@ -35,9 +35,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddOcelot().AddKubernetes();
 
-// Add Health Check
-builder.Services.AddHealthChecks();
-
 var app = builder.Build();
 
 app.UseHttpsRedirection();
@@ -51,7 +48,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseOcelot().Wait();
-
-app.MapHealthChecks("/healthz");
 
 app.Run();

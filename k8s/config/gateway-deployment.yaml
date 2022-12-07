@@ -29,20 +29,6 @@ spec:
         - name: secrets
           mountPath: /app/secrets
           readOnly: true
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 80
-          initialDelaySeconds: 60
-          periodSeconds: 10
-          timeoutSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 80
-          initialDelaySeconds: 50
-          periodSeconds: 10
-          timeoutSeconds: 10
       volumes:
       - name: secrets
         secret:
