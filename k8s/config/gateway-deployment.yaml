@@ -2,11 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gateway
+  namespace: rml
   labels:
     app: gateway
-  namespace: rml
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: gateway
@@ -30,6 +29,20 @@ spec:
         - name: secrets
           mountPath: /app/secrets
           readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 50
+          periodSeconds: 10
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 50
+          periodSeconds: 10
+          timeoutSeconds: 10
       volumes:
       - name: secrets
         secret:
