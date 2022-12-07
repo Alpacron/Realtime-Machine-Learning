@@ -34,6 +34,13 @@ spec:
             path: /healthz
           initialDelaySeconds: 10
           periodSeconds: 3
+        ports:
+        - containerPort: 9000
+          name: http
+          protocol: TCP
+        - containerPort: 9001
+          name: elastic
+          protocol: TCP
         readinessProbe:
           httpGet:
             path: /healthz
