@@ -59,6 +59,9 @@ builder.Services.AddSwaggerGen(c =>
         });
 });
 
+// Add Health Check
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -77,5 +80,7 @@ app.UseCors();
 app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
+
+app.MapHealthChecks("/healthz");
 
 app.Run();
