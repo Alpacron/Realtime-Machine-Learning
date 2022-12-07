@@ -16,4 +16,4 @@ spec:
           service:
             name: kube-prom-stack-grafana
             port:
-              number: 31073
+              number: 80
