@@ -10,7 +10,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /metrics(/|$)(.*)
+      - path: /rabbitmq(/|$)(.*)
         pathType: Prefix
         backend:
           service:
