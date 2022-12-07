@@ -34,3 +34,5 @@ spec:
       - name: secrets
         secret:
           secretName: global-secret
+      imagePullSecrets:
+      - name: regcred

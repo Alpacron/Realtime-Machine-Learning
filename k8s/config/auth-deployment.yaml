@@ -35,14 +35,14 @@ spec:
             port: 80
           initialDelaySeconds: 50
           periodSeconds: 3
+          timeoutSeconds: 10
         readinessProbe:
           httpGet:
             path: /healthz
             port: 80
           initialDelaySeconds: 50
           periodSeconds: 3
-          successThreshold: 1
-          timeoutSeconds: 5
+          timeoutSeconds: 10
       volumes:
       - name: secrets
         secret:
