@@ -1,13 +1,8 @@
 ﻿using Gateway.Helpers;
-using KubeClient.Extensions.KubeConfig.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Moq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using YamlDotNet.Core.Tokens;
 
 namespace Gateway.Tests.Helpers;
 
