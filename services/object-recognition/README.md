@@ -11,7 +11,3 @@ Install all dependencies.
 ### `python -m uvicorn app.main:app --reload`
 
 Runs the app in the development mode.
-
-### `docker build -t object_recognition_service .`
-
-Builds the docker image.
