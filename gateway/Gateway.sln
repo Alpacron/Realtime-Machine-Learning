@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway", "Gateway\Gateway.csproj", "{2A61BCD8-0FA4-4235-A5DA-0378267535CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gateway", "Gateway\Gateway.csproj", "{2A61BCD8-0FA4-4235-A5DA-0378267535CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway.Tests", "Gateway.Tests\Gateway.Tests.csproj", "{9FB0C721-CF15-49C9-95C1-390A3D5B4EEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{2A61BCD8-0FA4-4235-A5DA-0378267535CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A61BCD8-0FA4-4235-A5DA-0378267535CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A61BCD8-0FA4-4235-A5DA-0378267535CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FB0C721-CF15-49C9-95C1-390A3D5B4EEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FB0C721-CF15-49C9-95C1-390A3D5B4EEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FB0C721-CF15-49C9-95C1-390A3D5B4EEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FB0C721-CF15-49C9-95C1-390A3D5B4EEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
