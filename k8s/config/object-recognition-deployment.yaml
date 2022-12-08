@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: object-recognition-deployment
+  namespace: rml
+  labels:
+    app: object-recognition
+spec:
+  selector:
+    matchLabels:
+      app: object-recognition
+  template:
+    metadata:
+      labels:
+        app: object-recognition
+    spec:
+      containers:
+      - name: object-recognition
+        image: alpacron/object-recognition:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 443
+        - containerPort: 80
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: 250m
+        volumeMounts:
+        - name: secrets
+          mountPath: /app/secrets
+          readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 50
+          periodSeconds: 10
+          timeoutSeconds: 10
+      volumes:
+      - name: secrets
+        secret:
+          secretName: global-secret
+      imagePullSecrets:
+      - name: regcred
