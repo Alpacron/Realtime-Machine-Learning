@@ -40,7 +40,7 @@ nano repo/k8s/appsettings.secrets.json
 Now we can apply the secrets and config files:
 ```commandline
 microk8s kubectl create secret generic global-secret --from-file=repo/k8s/appsettings.secrets.json -n rml\
-&& microk8s kubectl apply -f repo/k8s/config
+&& microk8s kubectl apply -R -f repo/k8s/config
 ```
 
 ### Update cluster
