@@ -16,3 +16,8 @@ app.add_middleware(
 @app.get("/")
 def get_request():
     return "Hello World!"
+
+
+@app.get("/messaging")
+def get_request():
+    return ""
