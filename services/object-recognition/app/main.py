@@ -13,6 +13,11 @@ app.add_middleware(
     CORSMiddleware, allow_methods=allowed_methods, allow_headers=["*"])
 
 
-@app.get("/")
+@app.get("/healthz")
 def get_request():
-    return "Hello World!"
+    return "Healthy"
+
+
+@app.get("/messaging")
+def get_request():
+    return ""
