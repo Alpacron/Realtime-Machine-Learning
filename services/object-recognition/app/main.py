@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from fastapi.responses import PlainTextResponse
 
 app = FastAPI(
     title="Object Recognition",
@@ -15,7 +16,7 @@ app.add_middleware(
 
 @app.get("/healthz")
 def get_request():
-    return "Healthy"
+    return PlainTextResponse("Healthy")
 
 
 @app.get("/messaging")
