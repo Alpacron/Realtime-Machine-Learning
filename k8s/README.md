@@ -3,6 +3,13 @@
 <p align="center">Setup of the kubernetes environment on a ubuntu server.</p>
 <br><br>
 
+## Implementation
+The kubernets cluster was deployed on a VM in the vshpere environment.
+
+The first step was to setup microk8s environment and enable different addons such as dns, ingress, portainer and observability.
+
+Portainer was used a way to monitor and see logs of the containers. On portainer Helm was used to setup different services including Galera MariaDB and RabbitMQ. Galera MariaDB is a scalable cloud storage which automatically scales up/down the database depending on load. Observability creates a grafana dashboard which can be used to see metrics and load on the containers.
+
 ## Setup
 
 ### Setup micok8s
@@ -12,10 +19,11 @@ microk8s enable dns
 microk8s enable ingress
 ```
 
-Install portainer (optional):
+Install portainer and observability (optional):
 ```commandline
 microk8s enable community
 microk8s enable portainer
+microk8s enable observability
 ```
 
 ### Setup cluster
