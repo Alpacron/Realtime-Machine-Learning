@@ -4,6 +4,6 @@ from main import app
 
 def test_read_main():
     client = TestClient(app)
-    response = client.get('/')
+    response = client.get('/healthz')
     assert response.status_code == 200
-    assert response.json() == "Hello World!"
+    assert response.json() == "Healthy"
