@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse
-from .controllers.object_recognition_controller import router as object_recognition_router
+from controllers.object_recognition_controller import router as object_recognition_router
 
 app = FastAPI(
     title="Object Recognition",
