@@ -40,7 +40,7 @@ nano repo/k8s/appsettings.secrets.json
 Now we can apply the secrets and config files:
 ```commandline
 microk8s kubectl create secret generic global-secret --from-file=repo/k8s/appsettings.secrets.json -n rml\
-&& microk8s kubectl apply -f repo/k8s/config
+&& microk8s kubectl apply -R -f repo/k8s/config
 ```
 
 ### Update cluster
@@ -51,7 +51,7 @@ microk8s kubectl delete -f repo/k8s/config && rm -rf repo
 
 Then apply the latest version:
 ```commandline
-git clone https://github.com/Alpacron/antivalor repo ; microk8s kubectl apply -f repo/k8s/config
+git clone https://github.com/Alpacron/antivalor repo ; microk8s kubectl apply -R -f repo/k8s/config
 ```
 
 ### Clean up cluster
