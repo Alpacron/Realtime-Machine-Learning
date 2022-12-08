@@ -10,7 +10,7 @@ public static class JwtMiddleware
     public static Func<HttpContext, string, Func<Task>, Task> CreateAuthorizationFilter
         => async (context, securityKey, next) =>
         {
-            if (bool.Parse(context.Items.DownstreamRoute().RouteClaimsRequirement["Auth"]) == true)
+            if (bool.Parse(context.Items.DownstreamRoute().RouteClaimsRequirement["Auth"]))
             {
                 var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
                 if (token != null && Validate(token, securityKey))

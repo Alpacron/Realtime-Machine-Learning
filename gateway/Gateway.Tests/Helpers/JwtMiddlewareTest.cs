@@ -17,7 +17,7 @@ internal class JwtMiddlewareTest
     }
 
     [Test]
-    public async Task Validate_WithValidToken_ReturnsTrue()
+    public void Validate_WithValidToken_ReturnsTrue()
     {
         bool validToken = JwtMiddleware.Validate(generateJwtToken(1), jwtkey);
 
@@ -25,14 +25,14 @@ internal class JwtMiddlewareTest
     }
 
     [Test]
-    public async Task Validate_WithInValidToken_ReturnsTrue()
+    public void Validate_WithInValidToken_ReturnsTrue()
     {
         bool validToken = JwtMiddleware.Validate("badtoken", jwtkey);
 
         Assert.That(validToken, Is.False);
     }
 
-    public string generateJwtToken(int id)
+    private string generateJwtToken(int id)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(jwtkey);
