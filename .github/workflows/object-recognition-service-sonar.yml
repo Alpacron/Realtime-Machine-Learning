@@ -25,13 +25,13 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install tox
+        with:
+          projectBaseDir: ${{ env.workdir }}
         run: pip install tox
-        with:
-          projectBaseDir: ${{ env.workdir }}
       - name: Test
-        run: tox -e py
         with:
           projectBaseDir: ${{ env.workdir }}
+        run: tox -e py
       - uses: SonarSource/sonarcloud-github-action@master
         with:
           projectBaseDir: ${{ env.workdir }}
