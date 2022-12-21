@@ -41,6 +41,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapHealthChecks("/healthz");
+
 // Start consuming with rabbitmq
 app.Services.GetRequiredService<IDataAccessService>().SubscribeToPersistence();
 
