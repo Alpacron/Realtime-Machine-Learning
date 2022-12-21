@@ -40,6 +40,6 @@ jobs:
         KUBE_CERTIFICATE: ${{ secrets.KUBE_CERTIFICATE }}
         KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
       with:
-        args: rollout restart deployment -n rml gateway-deployment
+        args: rollout restart deployment -n rml gateway
     - name: deploy
       run: echo "deploying started"
