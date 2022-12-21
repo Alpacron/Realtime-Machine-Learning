@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace AuthService.Models;
+namespace AuthDataAccessService.Models;
 
 [Index(nameof(Email), IsUnique = true)]
 public class User
