@@ -2,6 +2,9 @@ name: 🐋 Kubernetes Config | Automatic Redeployment
 
 env:
   workdir: k8s/config
+  KUBE_HOST: ${{ secrets.KUBE_HOST }}
+  KUBE_CERTIFICATE: ${{ secrets.KUBE_CERTIFICATE }}
+  KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
 
 on:
   push:
@@ -18,12 +21,6 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Kube
-      uses: actions-hub/kubectl@master
-      env:
-        KUBE_HOST: ${{ secrets.KUBE_HOST }}
-        KUBE_CERTIFICATE: ${{ secrets.KUBE_CERTIFICATE }}
-        KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
     - name: Delete old config files
       uses: actions-hub/kubectl@master
       with:
