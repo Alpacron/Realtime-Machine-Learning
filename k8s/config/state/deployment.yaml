@@ -23,8 +23,8 @@ spec:
         - containerPort: 80
         resources:
           limits:
-            memory: 512Mi
-            cpu: 250m
+            memory: 256Mi
+            cpu: 100m
         volumeMounts:
         - name: secrets
           mountPath: /app/secrets
