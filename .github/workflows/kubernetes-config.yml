@@ -16,24 +16,14 @@ jobs:
     name: Deploy kubernetes config
     runs-on: self-hosted
     steps:
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2
+    - uses: appleboy/ssh-action@v0.1.6
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Delete old config files
-      uses: actions-hub/kubectl@master
-      with:
-        args: delete -R -f repo/k8s/config
-    - name: Delete old repo
-      uses: actions-hub/kubectl@master
-      with:
-        args: rm -rf repo
-    - name: Clone latest k8s config
-      uses: actions-hub/kubectl@master
-      with:
-        args: git clone https://github.com/Alpacron/antivalor repo
-    - name: Apply config files
-      uses: actions-hub/kubectl@master
-      with:
-        args: apply -R -f repo/k8s/config
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: 22
+        script: |
+          microk8s kubectl delete -f repo/k8s/config
+          rm -rf repo
+          git clone https://github.com/Alpacron/antivalor repo
+          microk8s kubectl apply -R -f repo/k8s/config
