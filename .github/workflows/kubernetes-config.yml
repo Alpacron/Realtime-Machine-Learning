@@ -24,7 +24,7 @@ jobs:
     - name: Delete old config files
       uses: actions-hub/kubectl@master
       with:
-        args: microk8s kubectl delete -R -f repo/k8s/config
+        args: delete -R -f repo/k8s/config
     - name: Delete old repo
       uses: actions-hub/kubectl@master
       with:
@@ -36,4 +36,4 @@ jobs:
     - name: Apply config files
       uses: actions-hub/kubectl@master
       with:
-        args: microk8s kubectl apply -R -f repo/k8s/config
+        args: apply -R -f repo/k8s/config
