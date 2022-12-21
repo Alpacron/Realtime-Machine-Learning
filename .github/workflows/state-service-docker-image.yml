@@ -35,6 +35,6 @@ jobs:
         KUBE_CERTIFICATE: ${{ secrets.KUBE_CERTIFICATE }}
         KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
       with:
-        args: rollout restart deployment playlist-app
+        args: rollout restart deployment -n rml state-deployment
     - name: deploy
       run: echo "deploying started"
