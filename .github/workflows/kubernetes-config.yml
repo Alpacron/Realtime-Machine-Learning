@@ -23,7 +23,7 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: 22
         script: |
-          microk8s kubectl delete -f repo/k8s/config
+          microk8s kubectl delete -R -f repo/k8s/config
           rm -rf repo
           git clone https://github.com/Alpacron/antivalor repo
           microk8s kubectl apply -R -f repo/k8s/config
