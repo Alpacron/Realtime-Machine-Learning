@@ -96,44 +96,23 @@ public class MessagingService : IMessagingService
 
     public async Task<string> RestCall(string method, string path, string? message = null)
     {
-        try
+        Console.WriteLine($"2 {method} {path}");
+        var config = KubernetesClientConfiguration.InClusterConfig();
+        Console.WriteLine(config.ToString());
+        var client = new Kubernetes(config);
+        Console.WriteLine($"2 {method} {path}");
+        var namespaces = client.CoreV1.ListNamespace();
+        Console.WriteLine($"2 {method} {path}");
+        foreach (var ns in namespaces.Items)
         {
-            Console.WriteLine($"1 {method} {path}");
-            var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
-            Console.WriteLine(config.ToString());
-            var client = new Kubernetes(config);
-            Console.WriteLine($"1 {method} {path}");
-            var namespaces = client.CoreV1.ListNamespace();
-            foreach (var ns in namespaces.Items)
+            Console.WriteLine(ns.Metadata.Name);
+            var list = client.CoreV1.ListNamespacedPod(ns.Metadata.Name);
+            foreach (var item in list.Items)
             {
-                Console.WriteLine(ns.Metadata.Name);
-                var list = client.CoreV1.ListNamespacedPod(ns.Metadata.Name);
-                foreach (var item in list.Items)
-                {
-                    Console.WriteLine(item.Metadata.Name);
-                }
+                Console.WriteLine(item.Metadata.Name);
             }
         }
-        catch { }
-        try
-        {
-            Console.WriteLine($"2 {method} {path}");
-            var config = KubernetesClientConfiguration.InClusterConfig();
-            Console.WriteLine(config.ToString());
-            var client = new Kubernetes(config);
-            Console.WriteLine($"2 {method} {path}");
-            var namespaces = client.CoreV1.ListNamespace();
-            foreach (var ns in namespaces.Items)
-            {
-                Console.WriteLine(ns.Metadata.Name);
-                var list = client.CoreV1.ListNamespacedPod(ns.Metadata.Name);
-                foreach (var item in list.Items)
-                {
-                    Console.WriteLine(item.Metadata.Name);
-                }
-            }
-        }
-        catch { }
+
         throw new NotImplementedException();
     }
 
