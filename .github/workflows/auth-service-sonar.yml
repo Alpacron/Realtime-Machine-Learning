@@ -34,41 +34,21 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Cache SonarCloud scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@v1
-        with:
-          path: .\.sonar\scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
       - name: Install SonarCloud scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: powershell
         run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+          dotnet tool install --global dotnet-sonarscanner
 
-      - name: Cache coverage
-        id: cache-coverage
-        uses: actions/cache@v1
-        with:
-          path: .\.sonar\coverage
-          key: ${{ runner.os }}-coverage
-          restore-keys: ${{ runner.os }}-coverage
       - name: Install Coverage
-        if: steps.cache-coverage.outputs.cache-hit != 'true'
-        shell: powershell
         run: |
-          New-Item -Path .\.sonar\coverage -ItemType Directory
-          dotnet tool update dotnet-coverage --tool-path .\.sonar\coverage
+          dotnet tool install --global dotnet-coverage
 
       - name: Test
         shell: powershell
-        run: .\.sonar\coverage\dotnet-coverage collect 'dotnet test ${{ env.workdir }}' -f xml -o 'coverage.xml'
+        run: dotnet-coverage collect 'dotnet test ${{ env.workdir }}' -f xml -o 'coverage.xml'
 
       - name: Build and analyse
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"auth" /o:"alpacron" /d:sonar.login="${{ env.SONAR_TOKEN }}" //d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          dotnet-sonarscanner begin /k:"auth" /o:"alpacron" /d:sonar.login="${{ env.SONAR_TOKEN }}" //d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
           dotnet build ${{ env.workdir }}
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ env.SONAR_TOKEN }}"
+          dotnet-sonarscanner end /d:sonar.login="${{ env.SONAR_TOKEN }}"
