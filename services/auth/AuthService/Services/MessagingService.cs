@@ -99,21 +99,30 @@ public class MessagingService : IMessagingService
         try
         {
             Console.WriteLine($"1 {method} {path}");
-            var config1 = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+            var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
             Console.WriteLine($"1 {method} {path}");
-            var client1 = new Kubernetes(config1);
-            Console.WriteLine(client1.CoreV1.ListNamespace());
+            var client = new Kubernetes(config);
+            Console.WriteLine(client.CoreV1.ListNamespace());
         }
         catch { }
         try
         {
             Console.WriteLine($"2 {method} {path}");
-            var config2 = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+            var config = KubernetesClientConfiguration.InClusterConfig();
             Console.WriteLine($"2 {method} {path}");
-            var client2 = new Kubernetes(config2);
-            Console.WriteLine(client2.CoreV1.ListNamespace());
+            var client = new Kubernetes(config);
+            Console.WriteLine(client.CoreV1.ListNamespace());
         }
-        catch {  }
+        catch { }
+        try
+        {
+            Console.WriteLine($"2 {method} {path}");
+            var config = KubernetesClientConfiguration.InClusterConfig();
+            Console.WriteLine($"2 {method} {path}");
+            var client = new Kubernetes(config);
+            Console.WriteLine(client.CoreV1.ListNamespace());
+        }
+        catch { }
         throw new NotImplementedException();
     }
 
