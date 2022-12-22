@@ -9,7 +9,7 @@ public interface IDataAccessService
     Task<User?> GetByEmail(string email);
     Task<User?> GetById(int id);
     Task<User> AddUser(User user);
-    Task<User?> UpdateUser(User user);
+    Task<User?> UpdateUser(User updatedUser);
     Task<User?> DeleteUser(int id);
 }
 
@@ -42,19 +42,19 @@ public class DataAccessService : IDataAccessService
         return user;
     }
 
-    public async Task<User?> UpdateUser(User updateduser)
+    public async Task<User?> UpdateUser(User updatedUser)
     {
-        var olduser = await _context.User.SingleOrDefaultAsync(m => m.Id == updateduser.Id);
+        var olduser = await _context.User.SingleOrDefaultAsync(m => m.Id == updatedUser.Id);
         if (olduser == null)
             return null;
 
-        olduser.Email = updateduser.Email;
-        olduser.Username = updateduser.Username;
-        olduser.PasswordHash = updateduser.PasswordHash;
+        olduser.Email = updatedUser.Email;
+        olduser.Username = updatedUser.Username;
+        olduser.PasswordHash = updatedUser.PasswordHash;
 
         await _context.SaveChangesAsync();
 
-        return updateduser;
+        return updatedUser;
     }
 
     public async Task<User?> DeleteUser(int id)
