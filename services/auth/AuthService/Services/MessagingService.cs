@@ -99,6 +99,7 @@ public class MessagingService : IMessagingService
         Console.WriteLine($"{method} {path}");
         var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
         var client = new Kubernetes(config);
+        Console.WriteLine(client.CoreV1.ListNamespace());
 
         V1ServiceList services = await client.CoreV1.ListNamespacedServiceAsync("rml");
         Console.WriteLine($"service {services}");
