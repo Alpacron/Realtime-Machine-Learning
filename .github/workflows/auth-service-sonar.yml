@@ -34,6 +34,10 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
+      - name: Test
+        shell: powershell
+        run: dotnet-coverage collect 'dotnet test ${{ env.workdir }}' -f xml -o 'coverage.xml'
+
       - name: Build and analyse
         shell: powershell
         run: |
