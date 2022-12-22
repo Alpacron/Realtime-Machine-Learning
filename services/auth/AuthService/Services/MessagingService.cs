@@ -97,11 +97,11 @@ public class MessagingService : IMessagingService
     public async Task<string> RestCall(string method, string path, string? message = null)
     {
         Console.WriteLine($"{method} {path}");
-        var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+        var config = KubernetesClientConfiguration.InClusterConfig();
         var client = new Kubernetes(config);
 
-        V1ServiceList services = client.ListNamespacedService("rml");
-        Console.WriteLine(services);
+        V1ServiceList services = await client.ListNamespacedServiceAsync("rml");
+        Console.WriteLine($"service {services}");
         foreach (var s in services.Items)
         {
             Console.WriteLine(s.Spec.ClusterIP);
@@ -109,9 +109,9 @@ public class MessagingService : IMessagingService
             {
                 Console.WriteLine(await _client.GetAsync($"{s.Spec.ClusterIP}{path}"));
             }
-            catch
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
         }
         throw new NotImplementedException();
