@@ -28,10 +28,10 @@ jobs:
           fetch-depth: 0
 
       - name: Test
-        run: dotnet tool run dotnet-coverage collect 'dotnet test ${{ env.workdir }}' -f xml -o 'coverage.xml'
+        run: dotnet dotnet-coverage collect 'dotnet test ${{ env.workdir }}' -f xml -o 'coverage.xml'
 
       - name: Build and analyse
         run: |
-          dotnet tool run dotnet-sonarscanner begin /k:"auth" /o:"alpacron" /d:sonar.login="${{ env.SONAR_TOKEN }}" //d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          dotnet dotnet-sonarscanner begin /k:"auth" /o:"alpacron" /d:sonar.login="${{ env.SONAR_TOKEN }}" //d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
           dotnet build ${{ env.workdir }}
-          dotnet tool run dotnet-sonarscanner end /d:sonar.login="${{ env.SONAR_TOKEN }}"
+          dotnet dotnet-sonarscanner end /d:sonar.login="${{ env.SONAR_TOKEN }}"
