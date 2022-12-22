@@ -17,7 +17,7 @@ on:
 jobs:
   build:
     name: Build and Analyse
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
@@ -31,6 +31,12 @@ jobs:
       - name: Test
         run: tox -e py
         working-directory: ${{ env.workdir }}
+
+  deploy:
+    name: Sonar
+    runs-on: self-hosted
+    needs: build
+    steps:
       - uses: sonarsource/sonarqube-scan-action@master
         with:
           projectBaseDir: ${{ env.workdir }}
