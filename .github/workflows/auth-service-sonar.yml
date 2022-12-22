@@ -38,14 +38,6 @@ jobs:
         run: |
           dotnet tool install --global dotnet-sonarscanner
 
-      - name: Install Coverage
-        run: |
-          dotnet tool install --global dotnet-coverage
-
-      - name: Test
-        shell: powershell
-        run: dotnet-coverage collect 'dotnet test ${{ env.workdir }}' -f xml -o 'coverage.xml'
-
       - name: Build and analyse
         shell: powershell
         run: |
