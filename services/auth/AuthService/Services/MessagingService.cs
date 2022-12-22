@@ -99,7 +99,6 @@ public class MessagingService : IMessagingService
     {
         Console.WriteLine($"2 {method} {path}");
         var config = KubernetesClientConfiguration.InClusterConfig();
-        config.Host = "192.168.240.84";
         Console.WriteLine(config.ToJson());
         var client = new Kubernetes(config);
         Console.WriteLine($"2 {method} {path}");
