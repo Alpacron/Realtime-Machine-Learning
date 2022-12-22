@@ -22,9 +22,9 @@ public class AuthController : ControllerBase
     [HttpGet("test")]
     public IActionResult Test()
     {
-        _messagingService.RestCall("Get", "/getbyid/1");
+        var r = _messagingService.RestCall("Get", "/getbyid/1").Result;
 
-        return Ok("test");
+        return Ok(r);
     }
 
     [HttpPost("authenticate")]
