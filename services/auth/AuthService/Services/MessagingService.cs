@@ -98,7 +98,8 @@ public class MessagingService : IMessagingService
     public async Task<string> RestCall(string method, string path, string? message = null)
     {
         Console.WriteLine($"2 {method} {path}");
-        var config = new KubernetesClientConfiguration { Host = "http://192.168.240.84" };
+        var config = KubernetesClientConfiguration.InClusterConfig();
+        config.Host = "192.168.240.84";
         Console.WriteLine(config.ToJson());
         var client = new Kubernetes(config);
         Console.WriteLine($"2 {method} {path}");
