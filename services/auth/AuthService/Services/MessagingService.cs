@@ -100,27 +100,38 @@ public class MessagingService : IMessagingService
         {
             Console.WriteLine($"1 {method} {path}");
             var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+            Console.WriteLine(config.ToString());
+            var client = new Kubernetes(config);
             Console.WriteLine($"1 {method} {path}");
-            var client = new Kubernetes(config);
-            Console.WriteLine(client.CoreV1.ListNamespace());
+            var namespaces = client.CoreV1.ListNamespace();
+            foreach (var ns in namespaces.Items)
+            {
+                Console.WriteLine(ns.Metadata.Name);
+                var list = client.CoreV1.ListNamespacedPod(ns.Metadata.Name);
+                foreach (var item in list.Items)
+                {
+                    Console.WriteLine(item.Metadata.Name);
+                }
+            }
         }
         catch { }
         try
         {
             Console.WriteLine($"2 {method} {path}");
             var config = KubernetesClientConfiguration.InClusterConfig();
-            Console.WriteLine($"2 {method} {path}");
+            Console.WriteLine(config.ToString());
             var client = new Kubernetes(config);
-            Console.WriteLine(client.CoreV1.ListNamespace());
-        }
-        catch { }
-        try
-        {
             Console.WriteLine($"2 {method} {path}");
-            var config = KubernetesClientConfiguration.InClusterConfig();
-            Console.WriteLine($"2 {method} {path}");
-            var client = new Kubernetes(config);
-            Console.WriteLine(client.CoreV1.ListNamespace());
+            var namespaces = client.CoreV1.ListNamespace();
+            foreach (var ns in namespaces.Items)
+            {
+                Console.WriteLine(ns.Metadata.Name);
+                var list = client.CoreV1.ListNamespacedPod(ns.Metadata.Name);
+                foreach (var item in list.Items)
+                {
+                    Console.WriteLine(item.Metadata.Name);
+                }
+            }
         }
         catch { }
         throw new NotImplementedException();
