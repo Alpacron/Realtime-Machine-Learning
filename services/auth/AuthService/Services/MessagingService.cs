@@ -96,24 +96,30 @@ public class MessagingService : IMessagingService
 
     public async Task<string> RestCall(string method, string path, string? message = null)
     {
-        Console.WriteLine($"2 {method} {path}");
-        var config = KubernetesClientConfiguration.InClusterConfig();
-        Console.WriteLine(config.ToJson());
-        var client = new Kubernetes(config);
-        Console.WriteLine($"2");
-        var namespaces = await client.ListNamespaceAsync();
-        Console.WriteLine($"2");
-        foreach (var ns in namespaces.Items)
+        try
         {
-            Console.WriteLine(ns.Metadata.Name);
-            var list = client.CoreV1.ListNamespacedPod(ns.Metadata.Name);
-            foreach (var item in list.Items)
+            Console.WriteLine($"2 {method} {path}");
+            var config = KubernetesClientConfiguration.InClusterConfig();
+            Console.WriteLine(config.ToJson());
+            var client = new Kubernetes(config);
+            Console.WriteLine($"2");
+            var namespaces = await client.ListNamespaceAsync();
+            Console.WriteLine($"2");
+            foreach (var ns in namespaces.Items)
             {
-                Console.WriteLine(item.Metadata.Name);
+                Console.WriteLine(ns.Metadata.Name);
+                var list = client.CoreV1.ListNamespacedPod(ns.Metadata.Name);
+                foreach (var item in list.Items)
+                {
+                    Console.WriteLine(item.Metadata.Name);
+                }
             }
+        } catch (Exception e)
+        {
+            throw new Exception(e.Message);
         }
-
-        throw new NotImplementedException();
+        var r = await _client.GetAsync(path);
+        return r.ToJson();
     }
 
     private static void Publish(IModel channel, string exchange, string route, string request, string? queue = null, byte[]? message = null)
