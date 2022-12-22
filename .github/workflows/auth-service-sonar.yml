@@ -34,10 +34,6 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Install SonarCloud scanner
-        run: |
-          dotnet tool install --global dotnet-sonarscanner
-
       - name: Build and analyse
         shell: powershell
         run: |
