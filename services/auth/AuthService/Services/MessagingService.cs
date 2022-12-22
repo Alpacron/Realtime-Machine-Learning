@@ -96,25 +96,24 @@ public class MessagingService : IMessagingService
 
     public async Task<string> RestCall(string method, string path, string? message = null)
     {
-        Console.WriteLine($"{method} {path}");
-        var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
-        var client = new Kubernetes(config);
-        Console.WriteLine(client.CoreV1.ListNamespace());
-
-        V1ServiceList services = await client.CoreV1.ListNamespacedServiceAsync("rml");
-        Console.WriteLine($"service {services}");
-        foreach (var s in services.Items)
+        try
         {
-            Console.WriteLine(s.Spec.ClusterIP);
-            try
-            {
-                Console.WriteLine(await _client.GetAsync($"{s.Spec.ClusterIP}{path}"));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            Console.WriteLine($"1 {method} {path}");
+            var config1 = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+            Console.WriteLine($"1 {method} {path}");
+            var client1 = new Kubernetes(config1);
+            Console.WriteLine(client1.CoreV1.ListNamespace());
         }
+        catch { }
+        try
+        {
+            Console.WriteLine($"2 {method} {path}");
+            var config2 = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+            Console.WriteLine($"2 {method} {path}");
+            var client2 = new Kubernetes(config2);
+            Console.WriteLine(client2.CoreV1.ListNamespace());
+        }
+        catch {  }
         throw new NotImplementedException();
     }
 
