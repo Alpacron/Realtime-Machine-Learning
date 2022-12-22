@@ -26,10 +26,10 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install tox
-        run: pip install tox
+        run: python3 -m pip install tox
         working-directory: ${{ env.workdir }}
       - name: Test
-        run: tox -e py
+        run: python3 -m tox -e py
         working-directory: ${{ env.workdir }}
       - uses: sonarsource/sonarqube-scan-action@master
         with:
