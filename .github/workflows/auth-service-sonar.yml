@@ -27,6 +27,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install tools
+        run: |
+          dotnet new tool-manifest
+          dotnet tool install dotnet-sonarscanner
+          dotnet tool install dotnet-coverage
+        
       - name: Test
         run: dotnet dotnet-coverage collect 'dotnet test ${{ env.workdir }}' -f xml -o 'coverage.xml'
 
