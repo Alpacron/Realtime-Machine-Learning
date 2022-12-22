@@ -16,7 +16,7 @@ on:
 
 jobs:
   build:
-    name: Build and Analyse
+    name: Build and Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -33,7 +33,7 @@ jobs:
         working-directory: ${{ env.workdir }}
 
   deploy:
-    name: Sonar
+    name: Analyse
     runs-on: self-hosted
     needs: build
     steps:
