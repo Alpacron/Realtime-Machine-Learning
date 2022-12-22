@@ -1,5 +1,4 @@
-﻿using k8s.Models;
-using k8s;
+﻿using k8s;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -102,7 +101,7 @@ public class MessagingService : IMessagingService
         Console.WriteLine(config.ToJson());
         var client = new Kubernetes(config);
         Console.WriteLine($"2");
-        var namespaces = client.CoreV1.ListNamespace();
+        var namespaces = await client.ListNamespaceAsync();
         Console.WriteLine($"2");
         foreach (var ns in namespaces.Items)
         {
