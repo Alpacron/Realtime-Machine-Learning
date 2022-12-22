@@ -3,6 +3,7 @@ using k8s;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using NuGet.Protocol;
 
 namespace AuthDataAccessService.Services;
 
@@ -98,7 +99,7 @@ public class MessagingService : IMessagingService
     {
         Console.WriteLine($"2 {method} {path}");
         var config = KubernetesClientConfiguration.InClusterConfig();
-        Console.WriteLine(config.ToString());
+        Console.WriteLine(config.ToJson());
         var client = new Kubernetes(config);
         Console.WriteLine($"2 {method} {path}");
         var namespaces = client.CoreV1.ListNamespace();
