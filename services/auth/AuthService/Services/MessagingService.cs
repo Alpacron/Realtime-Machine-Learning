@@ -118,7 +118,7 @@ public class MessagingService : IMessagingService
         {
             throw new Exception(e.Message);
         }
-        var r = await _client.GetAsync(path);
+        var r = await _client.GetAsync($"http://10.152.183.92{path}");
         return r.ToJson();
     }
 
