@@ -97,10 +97,10 @@ public class MessagingService : IMessagingService
     public async Task<string> RestCall(string method, string path, string? message = null)
     {
         Console.WriteLine($"{method} {path}");
-        var config = KubernetesClientConfiguration.InClusterConfig();
+        var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
         var client = new Kubernetes(config);
 
-        V1ServiceList services = await client.ListNamespacedServiceAsync("rml");
+        V1ServiceList services = await client.CoreV1.ListNamespacedServiceAsync("rml");
         Console.WriteLine($"service {services}");
         foreach (var s in services.Items)
         {
