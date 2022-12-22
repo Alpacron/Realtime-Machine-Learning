@@ -27,26 +27,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v1
-        with:
-          path: ~\sonar\cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
-      - name: Install SonarCloud scanner
-        run: |
-          dotnet tool install --global dotnet-sonarscanner
-
-      - name: Install Coverage
-        run: |
-          dotnet tool install --global dotnet-coverage
-
       - name: Test
         run: dotnet tool run dotnet-coverage collect 'dotnet test ${{ env.workdir }}' -f xml -o 'coverage.xml'
 
       - name: Build and analyse
         run: |
-          dotnet-sonarscanner begin /k:"auth" /o:"alpacron" /d:sonar.login="${{ env.SONAR_TOKEN }}" //d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          dotnet tool run dotnet-sonarscanner begin /k:"auth" /o:"alpacron" /d:sonar.login="${{ env.SONAR_TOKEN }}" //d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
           dotnet build ${{ env.workdir }}
           dotnet tool run dotnet-sonarscanner end /d:sonar.login="${{ env.SONAR_TOKEN }}"
