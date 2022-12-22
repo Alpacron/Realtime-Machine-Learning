@@ -101,9 +101,9 @@ public class MessagingService : IMessagingService
         var config = KubernetesClientConfiguration.InClusterConfig();
         Console.WriteLine(config.ToJson());
         var client = new Kubernetes(config);
-        Console.WriteLine(client.CoreV1.ReadNamespace("rml"));
+        Console.WriteLine($"2");
         var namespaces = client.CoreV1.ListNamespace();
-        Console.WriteLine($"2 {method} {path}");
+        Console.WriteLine($"2");
         foreach (var ns in namespaces.Items)
         {
             Console.WriteLine(ns.Metadata.Name);

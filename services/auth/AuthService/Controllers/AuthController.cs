@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using AuthService.Models;
 using AuthService.Services;
 using AuthService.Helpers;
+using AuthDataAccessService.Services;
 
 namespace AuthService.Controllers;
 
@@ -10,10 +11,20 @@ namespace AuthService.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IMessagingService _messagingService;
 
-    public AuthController(IUserService userService)
+    public AuthController(IUserService userService, IMessagingService messagingService)
     {
         _userService = userService;
+        _messagingService = messagingService;
+    }
+
+    [HttpGet("test")]
+    public IActionResult Test()
+    {
+        _messagingService.RestCall("Get", "/getbyid/1");
+
+        return Ok("test");
     }
 
     [HttpPost("authenticate")]

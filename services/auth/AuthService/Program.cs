@@ -85,6 +85,4 @@ app.MapControllers();
 
 app.MapHealthChecks("/healthz");
 
-app.Services.GetRequiredService<IMessagingService>().RestCall("Get", "/getbyid/1");
-
 app.Run();
