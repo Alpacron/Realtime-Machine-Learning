@@ -1,3 +1,4 @@
+using AuthDataAccessService.Services;
 using AuthService.Data;
 using AuthService.Helpers;
 using AuthService.Services;
@@ -22,6 +23,7 @@ builder.Services.AddDbContext<AuthContext>(options =>
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<IMessagingService, MessagingService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -82,5 +84,7 @@ app.UseMiddleware<JwtMiddleware>();
 app.MapControllers();
 
 app.MapHealthChecks("/healthz");
+
+app.Services.GetRequiredService<IMessagingService>().RestCall("Get", "/getbyid/1");
 
 app.Run();

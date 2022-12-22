@@ -1,4 +1,6 @@
-﻿using RabbitMQ.Client;
+﻿using k8s.Models;
+using k8s;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 
@@ -9,6 +11,7 @@ public interface IMessagingService
     void Subscribe(string exchange, Action<BasicDeliverEventArgs, string, string> callback, string exchangeType, string? bindingKey = null);
     void Publish(string exchange, string route, string request, string? queue = null, byte[]? message = null);
     Task<string> PublishAndRetrieve(string exchange, string request, byte[]? message = null);
+    Task<string> RestCall(string method, string path, string? message = null);
 }
 
 public class MessagingService : IMessagingService
@@ -17,9 +20,12 @@ public class MessagingService : IMessagingService
 
     private readonly IConnection _connection;
     private readonly string _serviceGuid;
+    private readonly HttpClient _client;
 
     public MessagingService(IConfiguration configuration)
     {
+        _client = new HttpClient();
+
         var factory = new ConnectionFactory()
         {
             HostName = configuration["RabbitMq:Connection:Host"],
@@ -86,6 +92,29 @@ public class MessagingService : IMessagingService
         channel.BasicCancel(consumeTag);
         channel.Close();
         throw new Exception($"[{DateTime.Now:HH:mm:ss}] request timed out request: {request}, on exchange: {exchange}");
+    }
+
+    public async Task<string> RestCall(string method, string path, string? message = null)
+    {
+        Console.WriteLine($"{method} {path}");
+        var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+        var client = new Kubernetes(config);
+
+        V1ServiceList services = client.ListNamespacedService("rml");
+        Console.WriteLine(services);
+        foreach (var s in services.Items)
+        {
+            Console.WriteLine(s.Spec.ClusterIP);
+            try
+            {
+                Console.WriteLine(await _client.GetAsync($"{s.Spec.ClusterIP}{path}"));
+            }
+            catch
+            {
+
+            }
+        }
+        throw new NotImplementedException();
     }
 
     private static void Publish(IModel channel, string exchange, string route, string request, string? queue = null, byte[]? message = null)

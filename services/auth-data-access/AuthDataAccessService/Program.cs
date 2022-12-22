@@ -19,8 +19,7 @@ builder.Services.AddDbContext<AuthContext>(
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddSingleton<IDataAccessService, DataAccessService>();
-builder.Services.AddSingleton<IMessagingService, MessagingService>();
+builder.Services.AddScoped<IDataAccessService, DataAccessService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -44,8 +43,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapHealthChecks("/healthz");
-
-// Start consuming with rabbitmq
-app.Services.GetRequiredService<IDataAccessService>().SubscribeToPersistence();
 
 app.Run();

@@ -1,124 +1,71 @@
 ﻿using AuthDataAccessService.Data;
 using AuthDataAccessService.Models;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using System.Text;
 
 namespace AuthDataAccessService.Services;
 
 public interface IDataAccessService
 {
-    void SubscribeToPersistence();
+    Task<User?> GetByEmail(string email);
+    Task<User?> GetById(int id);
+    Task<User> AddUser(User user);
+    Task<User?> UpdateUser(User user);
+    Task<User?> DeleteUser(int id);
 }
 
 public class DataAccessService : IDataAccessService
 {
-    private readonly IServiceProvider _serviceProvider;
-    private readonly IMessagingService _messagingService;
+    private readonly AuthContext _context;
 
-    public DataAccessService(IServiceProvider serviceProvider, IMessagingService messagingService)
+    public DataAccessService(AuthContext authContext)
     {
-        _serviceProvider = serviceProvider;
-        _messagingService = messagingService;
-
+        _context = authContext;
     }
 
-    public void SubscribeToPersistence()
+    public async Task<User?> GetByEmail(string email)
     {
-        _messagingService.Subscribe("auth-data", (BasicDeliverEventArgs ea, string queue, string request) => RouteCallback(ea, queue, request), ExchangeType.Topic, "*.*.request");
+        var user = await _context.User.SingleOrDefaultAsync(m => m.Email == email);
+        return user;
     }
 
-    private async void RouteCallback(BasicDeliverEventArgs ea, string queue, string request)
+    public async Task<User?> GetById(int id)
     {
-        using AuthContext context = _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<AuthContext>();
+        var user = await _context.User.SingleOrDefaultAsync(m => m.Id == id);
+        return user;
+    }
 
-        string route = ea.RoutingKey.Replace("request", "response");
+    public async Task<User> AddUser(User user)
+    {
+        _context.Add(user);
+        await _context.SaveChangesAsync();
+        
+        return user;
+    }
 
-        string data = Encoding.UTF8.GetString(ea.Body.ToArray());
-        string exchange = ea.Exchange;
+    public async Task<User?> UpdateUser(User updateduser)
+    {
+        var olduser = await _context.User.SingleOrDefaultAsync(m => m.Id == updateduser.Id);
+        if (olduser == null)
+            return null;
 
-        switch (request)
-        {
-            case "getbyemail":
-                {
-                    var user = await context.User.SingleOrDefaultAsync(m => m.Email == data);
-                    var json = JsonConvert.SerializeObject(user);
-                    byte[] message = Encoding.UTF8.GetBytes(json);
+        olduser.Email = updateduser.Email;
+        olduser.Username = updateduser.Username;
+        olduser.PasswordHash = updateduser.PasswordHash;
 
-                    _messagingService.Publish(exchange, queue, route, request, message);
+        await _context.SaveChangesAsync();
 
-                    break;
-                }
-            case "getbyid":
-                {
-                    int id = int.Parse(data);
-                    var user = await context.User.SingleOrDefaultAsync(m => m.Id == id);
-                    var json = JsonConvert.SerializeObject(user);
-                    byte[] message = Encoding.UTF8.GetBytes(json);
+        return updateduser;
+    }
 
-                    _messagingService.Publish(exchange, queue, route, request, message);
+    public async Task<User?> DeleteUser(int id)
+    {
+        var user = await _context.User.SingleOrDefaultAsync(m => m.Id == id);
+        if (user == null)
+            return null;
 
-                    break;
-                }
-            case "adduser":
-                {
-                    var user = JsonConvert.DeserializeObject<User>(data);
-                    if (user == null)
-                        break;
+        _context.User.Remove(user);
+        await _context.SaveChangesAsync();
 
-                    context.Add(user);
-                    await context.SaveChangesAsync();
-
-                    var newUser = await context.User.SingleOrDefaultAsync(m => m.Email == user.Email);
-                    if (newUser == null)
-                        break;
-
-                    _messagingService.Publish(exchange, queue, route, request, ea.Body.ToArray());
-
-                    break;
-                }
-            case "updateuser":
-                {
-                    var updateduser = JsonConvert.DeserializeObject<User>(data);
-                    if (updateduser == null)
-                        break;
-
-                    var olduser = await context.User.SingleOrDefaultAsync(m => m.Id == updateduser.Id);
-                    if (olduser == null)
-                        break;
-
-                    olduser.Email = updateduser.Email;
-                    olduser.Username = updateduser.Username;
-                    olduser.PasswordHash = updateduser.PasswordHash;
-
-                    await context.SaveChangesAsync();
-
-                    _messagingService.Publish(exchange, queue, route, request, ea.Body.ToArray());
-
-                    break;
-                }
-            case "deleteuser":
-                {
-                    int id = int.Parse(data);
-
-                    var user = await context.User.SingleOrDefaultAsync(m => m.Id == id);
-                    if (user == null)
-                        return;
-
-                    context.User.Remove(user);
-                    await context.SaveChangesAsync();
-
-                    var json = JsonConvert.SerializeObject(user);
-                    byte[] message = Encoding.UTF8.GetBytes(json);
-                    _messagingService.Publish(exchange, queue, route, request, message);
-
-                    break;
-                }
-            default:
-                Console.WriteLine($"Request {request} Not Found");
-                break;
-        }
+        return user;
     }
 }
