@@ -85,7 +85,7 @@ public class MessagingService : IMessagingService
 
         channel.BasicCancel(consumeTag);
         channel.Close();
-        throw new Exception($"[{DateTime.Now:HH:mm:ss}] request timed out request: {request}, on exchange: {exchange}");
+        throw new TimeoutException($"[{DateTime.Now:HH:mm:ss}] request timed out request: {request}, on exchange: {exchange}");
     }
 
     private static void Publish(IModel channel, string exchange, string route, string request, string? queue = null, byte[]? message = null)

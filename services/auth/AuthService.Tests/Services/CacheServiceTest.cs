@@ -15,7 +15,7 @@ internal class CacheServiceTest
     };
 
     [Test]
-    public async Task Test_Caching()
+    public void Test_Caching()
     {
         var cache = new MemoryCache(new MemoryCacheOptions());
         CacheService cacheService = new(cache);
@@ -24,7 +24,7 @@ internal class CacheServiceTest
 
         cacheService.CacheGet(defaultUser.Email, out User? user);
 
-        Assert.That(user.Id, Is.EqualTo(defaultUser.Id));
+        Assert.That(user!.Id, Is.EqualTo(defaultUser.Id));
 
         cacheService.CacheRemove(defaultUser);
 

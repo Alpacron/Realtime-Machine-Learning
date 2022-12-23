@@ -46,7 +46,7 @@ public class ConsumerService : IConsumerService
 
                     dataAccessService.DeleteCachedUser(id);
                     break;
-                };
+                }
             case "updateuser":
                 {
                     var updateduser = JsonConvert.DeserializeObject<User>(data);
