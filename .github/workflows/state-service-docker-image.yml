@@ -2,9 +2,9 @@ name: 🐋 State Service | Docker
 
 env:
   workdir: services/state
-        KUBE_HOST: ${{ secrets.KUBE_HOST }}
-        KUBE_CERTIFICATE: ${{ secrets.KUBE_CERTIFICATE }}
-        KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+  KUBE_HOST: ${{ secrets.KUBE_HOST }}
+  KUBE_CERTIFICATE: ${{ secrets.KUBE_CERTIFICATE }}
+  KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
 
 on:
   push:
