@@ -3,6 +3,7 @@ name: ☁ Electron App | Sonar
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   SONAR_TOKEN: ${{ secrets.SONAR_ELECTRON }}
+  SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
   workdir: electron-app
 
 on:
@@ -16,7 +17,7 @@ on:
 jobs:
   build:
     name: Build and Analyse
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       matrix:
         node-version: [16.x]
@@ -34,6 +35,6 @@ jobs:
       - name: Test
         working-directory: ${{ env.workdir }}
         run: yarn test -- --coverage
-      - uses: SonarSource/sonarcloud-github-action@master
+      - uses: sonarsource/sonarqube-scan-action@master
         with:
           projectBaseDir: ${{ env.workdir }}
