@@ -17,12 +17,9 @@ public class MessagingService : IMessagingService
 
     private readonly IConnection _connection;
     private readonly string _serviceGuid;
-    private readonly HttpClient _client;
 
     public MessagingService(IConfiguration configuration)
     {
-        _client = new HttpClient();
-
         var factory = new ConnectionFactory()
         {
             HostName = configuration["RabbitMq:Connection:Host"],
