@@ -24,6 +24,7 @@ builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDataAccessService, DataAccessService>();
+builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddSingleton<IMessagingService, MessagingService>();
 builder.Services.AddSingleton<IConsumerService, ConsumerService>();
 

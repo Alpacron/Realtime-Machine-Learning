@@ -1,7 +1,6 @@
 ﻿using AuthService.Data;
 using AuthService.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -23,24 +22,24 @@ public class DataAccessService : IDataAccessService
     private readonly string AUTH_EXCHANGE = "auth";
 
     private readonly AuthContext _context;
-    private readonly IMemoryCache _cache;
     private readonly IMessagingService _messagingService;
+    private readonly ICacheService _cacheService;
 
-    public DataAccessService(AuthContext authContext, IMemoryCache memoryCache, IMessagingService messagingService)
+    public DataAccessService(AuthContext authContext, IMessagingService messagingService, ICacheService cacheService)
     {
         _context = authContext;
-        _cache = memoryCache;
         _messagingService = messagingService;
+        _cacheService = cacheService;
     }
 
     public async Task<User?> GetByEmail(string email)
     {
-        if (!_cache.TryGetValue(new UserKey(email), out User? user))
+        if (!_cacheService.CacheGet(email, out User? user))
         {
             user = await _context.User.SingleOrDefaultAsync(m => m.Email == email);
 
             if (user != null)
-                _cache.Set(new UserKey(user), user);
+                _cacheService.CacheSet(user);
         }
 
         return user;
@@ -48,12 +47,12 @@ public class DataAccessService : IDataAccessService
 
     public async Task<User?> GetById(int id)
     {
-        if (!_cache.TryGetValue(new UserKey(id), out User? user))
+        if (!_cacheService.CacheGet(id, out User? user))
         {
             user = await _context.User.SingleOrDefaultAsync(m => m.Id == id);
 
             if (user != null)
-                _cache.Set(new UserKey(user), user);
+                _cacheService.CacheSet(user);
         }
 
         return user;
@@ -64,7 +63,7 @@ public class DataAccessService : IDataAccessService
         _context.Add(user);
         await _context.SaveChangesAsync();
 
-        _cache.Set(new UserKey(user), user);
+        _cacheService.CacheSet(user);
 
         return user;
     }
@@ -90,7 +89,7 @@ public class DataAccessService : IDataAccessService
 
     public User? UpdateCachedUser(User updatedUser)
     {
-        _cache.TryGetValue(new UserKey(updatedUser.Id), out User? user);
+        _cacheService.CacheGet(updatedUser.Id, out User? user);
         if (user is null)
             return null;
 
@@ -98,8 +97,8 @@ public class DataAccessService : IDataAccessService
         user.Username = updatedUser.Username;
         user.PasswordHash = updatedUser.PasswordHash;
 
-        _cache.Remove(new UserKey(updatedUser.Id));
-        _cache.Set(new UserKey(user), user);
+        _cacheService.CacheRemove(updatedUser);
+        _cacheService.CacheSet(user);
 
         return user;
     }
@@ -122,11 +121,11 @@ public class DataAccessService : IDataAccessService
 
     public User? DeleteCachedUser(int id)
     {
-        _cache.TryGetValue(new UserKey(id), out User? user);
+        _cacheService.CacheGet(id, out User? user);
         if (user is null)
             return null;
 
-        _cache.Remove(new UserKey(id));
+        _cacheService.CacheRemove(user);
 
         return user;
     }
