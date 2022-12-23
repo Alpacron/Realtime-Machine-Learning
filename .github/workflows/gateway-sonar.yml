@@ -4,7 +4,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   SONAR_TOKEN: ${{ secrets.SONAR_GATEWAY }}
   workdir: gateway
-  project: gateway_antivalor
+  project: gateway
 
 on:
   push:
@@ -38,6 +38,6 @@ jobs:
 
       - name: Build and analyse
         run: |
-          dotnet dotnet-sonarscanner begin /k:"${{ env.project }}" /o:"alpacron" /d:sonar.login="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          dotnet dotnet-sonarscanner begin /k:"{{ env.project }}" /o:"alpacron" /d:sonar.login="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
           dotnet build ${{ env.workdir }}
           dotnet dotnet-sonarscanner end /d:sonar.login="${{ env.SONAR_TOKEN }}"
