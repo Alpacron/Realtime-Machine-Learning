@@ -5,11 +5,11 @@ namespace AuthService.Models;
 public class RegisterRequest
 {
     [Required, EmailAddress]
-    public string Email { get; set; }
+    public string Email { get; set; } = default!;
 
     [Required, MinLength(4)]
-    public string Username { get; set; }
+    public string Username { get; set; } = default!;
 
     [Required, MinLength(4)]
-    public string Password { get; set; }
+    public string Password { get; set; } = default!;
 }

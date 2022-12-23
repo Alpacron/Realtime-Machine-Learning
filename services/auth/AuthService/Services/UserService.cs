@@ -1,8 +1,8 @@
-using AuthService.Helpers;
-using AuthService.Data;
 using AuthService.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace AuthService.Services;
 
@@ -10,24 +10,23 @@ public interface IUserService
 {
     Task<AuthenticateResponse> Authenticate(AuthenticateRequest authenticateRequest);
     Task<AuthenticateResponse> Register(RegisterRequest registerRequest);
-    Task<User> GetById(int id);
     Task<DeleteResponse> Delete(int id);
     Task<AuthenticateResponse> Update(int id, UpdateRequest updateRequest);
 }
 
 public class UserService : IUserService
 {
-    private readonly AuthContext _context;
-    private readonly Jwt _jwt;
+    private readonly string _jwtSecret;
+    private readonly IDataAccessService _dataAccessService;
 
-    public UserService(AuthContext context, IOptions<Jwt> jwt)
+    public UserService(IConfiguration configuration, IDataAccessService dataAccessService)
     {
-        _context = context;
-        _jwt = jwt.Value;
+        _jwtSecret = configuration["Jwt:Secret"];
+        _dataAccessService = dataAccessService;
     }
     public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest authenticateRequest)
     {
-        User user = await _context.User.SingleOrDefaultAsync(m => m.Email == authenticateRequest.Email);
+        User? user = await _dataAccessService.GetByEmail(authenticateRequest.Email);
 
         if (user == null) return new AuthenticateResponse()
         {
@@ -42,14 +41,14 @@ public class UserService : IUserService
             Details = "Email or password is incorrect."
         };
 
-        var token = _jwt.generateJwtToken(user);
+        var token = GenerateJwtToken(user);
 
         return new AuthenticateResponse(user, token);
     }
 
     public async Task<AuthenticateResponse> Register(RegisterRequest registerRequest)
     {
-        User existingUser = await _context.User.SingleOrDefaultAsync(m => m.Email == registerRequest.Email);
+        User? existingUser = await _dataAccessService.GetByEmail(registerRequest.Email);
         if (existingUser != null) return new AuthenticateResponse()
         {
             Success = false,
@@ -63,25 +62,16 @@ public class UserService : IUserService
             Username = registerRequest.Username
         };
 
-        _context.Add(user);
+        await _dataAccessService.AddUser(user);
 
-        var token = _jwt.generateJwtToken(user);
-
-        await _context.SaveChangesAsync();
+        var token = GenerateJwtToken(user);
 
         return new AuthenticateResponse(user, token);
     }
 
-    public async Task<User> GetById(int id)
-    {
-        var user = await _context.User.SingleOrDefaultAsync(m => m.Id == id);
-
-        return user;
-    }
-
     public async Task<DeleteResponse> Delete(int id)
     {
-        var user = await _context.User.SingleOrDefaultAsync(m => m.Id == id);
+        User? user = await _dataAccessService.DeleteUser(id);
         if (user == null)
         {
             return new DeleteResponse()
@@ -91,16 +81,13 @@ public class UserService : IUserService
             };
         }
 
-        _context.User.Remove(user);
-        await _context.SaveChangesAsync();
-
         return new DeleteResponse(user);
     }
 
     public async Task<AuthenticateResponse> Update(int id, UpdateRequest updateRequest)
     {
-        var user = await _context.User.SingleOrDefaultAsync(m => m.Id == id);
-        if (user == null)
+        User? existingUser = await _dataAccessService.GetById(id);
+        if (existingUser is null)
         {
             return new AuthenticateResponse()
             {
@@ -109,17 +96,43 @@ public class UserService : IUserService
             };
         }
 
-        if (updateRequest.Email != null)
-            user.Email = updateRequest.Email;
-        if (updateRequest.Username != null)
-            user.Username = updateRequest.Username;
-        if (updateRequest.Password != null)
-            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(updateRequest.Password);
+        User newUser = new()
+        {
+            Id = id,
+            Email = updateRequest.Email is string e? e : existingUser.Email,
+            Username = updateRequest.Username is string u ? u : existingUser.Username,
+            PasswordHash = updateRequest.Password is string p ? BCrypt.Net.BCrypt.HashPassword(p) : existingUser.PasswordHash,
+        };
 
-        var token = _jwt.generateJwtToken(user);
+        User? updatedUser = await _dataAccessService.UpdateUser(newUser);
+        if (updatedUser is null)
+        {
+            return new AuthenticateResponse()
+            {
+                Success = false,
+                Details = "User does not exist."
+            };
+        }
 
-        await _context.SaveChangesAsync();
+        var token = GenerateJwtToken(updatedUser);
 
-        return new AuthenticateResponse(user, token);
+        return new AuthenticateResponse(updatedUser, token);
+    }
+
+    private string GenerateJwtToken(User user)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_jwtSecret);
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new[]
+            {
+                new Claim("id", user.Id.ToString())
+            }),
+            Expires = DateTime.UtcNow.AddDays(1),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
     }
 }

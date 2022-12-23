@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using AuthService.Models;
 using AuthService.Services;
 using AuthService.Helpers;
-using AuthDataAccessService.Services;
 
 namespace AuthService.Controllers;
 
@@ -11,20 +10,10 @@ namespace AuthService.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IUserService _userService;
-    private readonly IMessagingService _messagingService;
 
-    public AuthController(IUserService userService, IMessagingService messagingService)
+    public AuthController(IUserService userService)
     {
         _userService = userService;
-        _messagingService = messagingService;
-    }
-
-    [HttpGet("test")]
-    public IActionResult Test()
-    {
-        var r = _messagingService.RestCall("Get", "/getbyid/1").Result;
-
-        return Ok(r);
     }
 
     [HttpPost("authenticate")]
@@ -63,8 +52,9 @@ public class AuthController : ControllerBase
     [HttpGet("authenticated")]
     public IActionResult Authenticated()
     {
-        User user = (User)HttpContext.Items["User"];
-        string token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+        User user = (User)HttpContext.Items["User"]!;
+
+        string token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last()!;
 
         AuthenticateResponse response = new(user, token);
 
@@ -75,7 +65,7 @@ public class AuthController : ControllerBase
     [HttpDelete("delete")]
     public IActionResult Delete()
     {
-        User user = (User)HttpContext.Items["User"];
+        User user = (User)HttpContext.Items["User"]!;
 
         DeleteResponse response = _userService.Delete(user.Id).Result;
 
@@ -94,7 +84,7 @@ public class AuthController : ControllerBase
     [HttpPut("update")]
     public IActionResult Update(UpdateRequest updateRequest)
     {
-        User user = (User)HttpContext.Items["User"];
+        User user = (User)HttpContext.Items["User"]!;
 
         AuthenticateResponse response = _userService.Update(user.Id, updateRequest).Result;
 

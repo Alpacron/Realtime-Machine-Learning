@@ -1,17 +1,14 @@
-﻿using k8s;
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
-using NuGet.Protocol;
 
-namespace AuthDataAccessService.Services;
+namespace AuthService.Services;
 
 public interface IMessagingService
 {
     void Subscribe(string exchange, Action<BasicDeliverEventArgs, string, string> callback, string exchangeType, string? bindingKey = null);
     void Publish(string exchange, string route, string request, string? queue = null, byte[]? message = null);
     Task<string> PublishAndRetrieve(string exchange, string request, byte[]? message = null);
-    Task<string> RestCall(string method, string path, string? message = null);
 }
 
 public class MessagingService : IMessagingService
@@ -92,34 +89,6 @@ public class MessagingService : IMessagingService
         channel.BasicCancel(consumeTag);
         channel.Close();
         throw new Exception($"[{DateTime.Now:HH:mm:ss}] request timed out request: {request}, on exchange: {exchange}");
-    }
-
-    public async Task<string> RestCall(string method, string path, string? message = null)
-    {
-        try
-        {
-            Console.WriteLine($"2 {method} {path}");
-            var config = KubernetesClientConfiguration.InClusterConfig();
-            Console.WriteLine(config.ToJson());
-            var client = new Kubernetes(config);
-            Console.WriteLine($"2");
-            var namespaces = await client.ListNamespaceAsync();
-            Console.WriteLine($"2");
-            foreach (var ns in namespaces.Items)
-            {
-                Console.WriteLine(ns.Metadata.Name);
-                var list = client.CoreV1.ListNamespacedPod(ns.Metadata.Name);
-                foreach (var item in list.Items)
-                {
-                    Console.WriteLine(item.Metadata.Name);
-                }
-            }
-        } catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
-        var r = await _client.GetAsync($"http://10.152.183.92{path}");
-        return r.ToJson();
     }
 
     private static void Publish(IModel channel, string exchange, string route, string request, string? queue = null, byte[]? message = null)

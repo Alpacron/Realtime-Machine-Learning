@@ -1,5 +1,4 @@
 ﻿using AuthService.Services;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -8,30 +7,30 @@ namespace AuthService.Helpers;
 public class JwtMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly Jwt _jwt;
+    private readonly string _jwtSecret;
 
-    public JwtMiddleware(RequestDelegate next, IOptions<Jwt> jwt)
+    public JwtMiddleware(RequestDelegate next, IConfiguration configuration)
     {
         _next = next;
-        _jwt = jwt.Value;
+        _jwtSecret = configuration["Jwt:Secret"];
     }
 
-    public async Task Invoke(HttpContext context, IUserService userService)
+    public async Task Invoke(HttpContext context, IDataAccessService dataAccessService)
     {
         var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
         if (token != null)
-            await attachUserToContext(context, userService, token);
+            await AttachUserToContext(context, token, dataAccessService);
 
         await _next(context);
     }
 
-    private async Task attachUserToContext(HttpContext context, IUserService userService, string token)
+    private async Task AttachUserToContext(HttpContext context, string token, IDataAccessService dataAccessService)
     {
         try
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwt.Key);
+            var key = Encoding.ASCII.GetBytes(_jwtSecret);
             tokenHandler.ValidateToken(token, new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
@@ -46,7 +45,7 @@ public class JwtMiddleware
             var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
             // attach user to context on successful jwt validation
-            var user = await userService.GetById(userId);
+            var user = await dataAccessService.GetById(userId);
             context.Items["User"] = user;
         }
         catch

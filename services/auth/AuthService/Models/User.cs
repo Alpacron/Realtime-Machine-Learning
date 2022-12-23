@@ -8,10 +8,13 @@ public class User
 {
     [Required]
     public int Id { get; set; }
+
     [Required]
-    public string Username { get; set; }
+    public string Username { get; set; } = default!;
+
     [Required]
-    public string PasswordHash { get; set; }
+    public string PasswordHash { get; set; } = default!;
+
     [Required]
-    public string Email { get; set; }
+    public string Email { get; set; } = default!;
 }

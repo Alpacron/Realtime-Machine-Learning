@@ -1,4 +1,3 @@
-using AuthDataAccessService.Services;
 using AuthService.Data;
 using AuthService.Helpers;
 using AuthService.Services;
@@ -10,8 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("secrets/appsettings.secrets.json", true);
 
-builder.Services.Configure<Jwt>(builder.Configuration.GetSection("Jwt"));
-
 // Add db connection
 var conStrBuilder = new MySqlConnectionStringBuilder(
     builder.Configuration.GetConnectionString("DBConnectionString"));
@@ -20,10 +17,15 @@ var connection = conStrBuilder.ConnectionString;
 builder.Services.AddDbContext<AuthContext>(options =>
   options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
 
+// Add memory cache
+builder.Services.AddMemoryCache();
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IDataAccessService, DataAccessService>();
 builder.Services.AddSingleton<IMessagingService, MessagingService>();
+builder.Services.AddSingleton<IConsumerService, ConsumerService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -73,8 +75,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.ConfigureExceptionHandler();
-
 app.UseHttpsRedirection();
 
 app.UseCors();
@@ -84,5 +84,8 @@ app.UseMiddleware<JwtMiddleware>();
 app.MapControllers();
 
 app.MapHealthChecks("/healthz");
+
+app.Services.GetRequiredService<IMessagingService>();
+app.Services.GetRequiredService<IConsumerService>();
 
 app.Run();
