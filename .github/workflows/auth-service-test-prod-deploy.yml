@@ -22,7 +22,7 @@ jobs:
     - name: Build the Docker image
       run: docker build -t alpacron/auth:test $workdir
     - name: Push the Docker image
-      run: docker push alpacron/auth
+      run: docker push alpacron/auth:test
 
   deploytest:
     name: Deploy
