@@ -10,7 +10,7 @@ on:
 
 jobs:
   buildtest:
-    name: Build and Push Image
+    name: Build and Push Test Image
     runs-on: ubuntu-latest
     steps:
     - name: Login to Docker Hub
@@ -25,7 +25,7 @@ jobs:
       run: docker push alpacron/auth:test
 
   deploytest:
-    name: Deploy
+    name: Deploy Test
     needs: buildtest
     runs-on: self-hosted
     steps:
@@ -65,7 +65,7 @@ jobs:
         path: reports/
 
   build:
-    name: Build and Push Image
+    name: Build and Push Prod Image
     needs: runtest
     runs-on: ubuntu-latest
     steps:
@@ -81,7 +81,7 @@ jobs:
       run: docker push alpacron/auth
 
   deploy:
-    name: Deploy
+    name: Deploy Prod
     needs: build
     runs-on: self-hosted
     steps:
