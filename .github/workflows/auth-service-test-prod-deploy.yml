@@ -65,6 +65,7 @@ jobs:
         path: reports/
 
   build:
+    needs: runtest
     name: Build and Push Prod Image
     runs-on: ubuntu-latest
     steps:
