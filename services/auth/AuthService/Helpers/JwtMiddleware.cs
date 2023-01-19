@@ -12,7 +12,7 @@ public class JwtMiddleware
     public JwtMiddleware(RequestDelegate next, IConfiguration configuration)
     {
         _next = next;
-        _jwtSecret = configuration["Jwt:Secret"];
+        _jwtSecret = configuration["Jwt:Key"];
     }
 
     public async Task Invoke(HttpContext context, IDataAccessService dataAccessService)
