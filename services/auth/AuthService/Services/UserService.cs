@@ -21,7 +21,7 @@ public class UserService : IUserService
 
     public UserService(IConfiguration configuration, IDataAccessService dataAccessService)
     {
-        _jwtSecret = configuration["Jwt:Secret"];
+        _jwtSecret = configuration["Jwt:Key"];
         _dataAccessService = dataAccessService;
     }
     public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest authenticateRequest)
